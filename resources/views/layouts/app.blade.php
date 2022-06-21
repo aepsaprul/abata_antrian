@@ -132,10 +132,20 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
-                        @if (Auth::user()->roles == "admin_situmpur")
+                        @if (Auth::user()->roles == "admin_antrian")
                             <li class="nav-item">
                                 <a href="" class="nav-link {{ request()->is(['home', 'home/*']) ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-tachometer-alt text-center mr-2" style="width: 30px;"></i><p>Dashboard</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('access') }}" class="nav-link {{ request()->is(['navigasi', 'navigasi/*']) ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-tachometer-alt text-center mr-2" style="width: 30px;"></i><p>Navigasi</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('user') }}" class="nav-link {{ request()->is(['user', 'user/*']) ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-tachometer-alt text-center mr-2" style="width: 30px;"></i><p>User</p>
                                 </a>
                             </li>
                         @else
