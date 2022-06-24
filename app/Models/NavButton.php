@@ -12,4 +12,12 @@ class NavButton extends Model
     public function navSub() {
         return $this->belongsTo(NavSub::class, 'sub_id', 'id');
     }
+
+    public function navAccess() {
+        return $this->hasMany(NavAccess::class, 'nav_button_id', 'id');
+    }
+
+    public function navMain() {
+        return $this->belongsTo(NavMain::class, 'main_id', 'id');
+    }
 }

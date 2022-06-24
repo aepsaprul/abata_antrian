@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ asset('public/assets/logo-daun.png') }}" rel="icon" type="image/x-icon">
-    <title>{{ config('app.name', 'HO') }}</title>
+    <title>{{ config('app.name', 'Antrian') }}</title>
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -132,55 +132,35 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
-                        @if (Auth::user()->roles == "admin_antrian")
-                            <li class="nav-item">
-                                <a href="" class="nav-link {{ request()->is(['home', 'home/*']) ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-tachometer-alt text-center mr-2" style="width: 30px;"></i><p>Dashboard</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('access') }}" class="nav-link {{ request()->is(['navigasi', 'navigasi/*']) ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-tachometer-alt text-center mr-2" style="width: 30px;"></i><p>Navigasi</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('user') }}" class="nav-link {{ request()->is(['user', 'user/*']) ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-tachometer-alt text-center mr-2" style="width: 30px;"></i><p>User</p>
-                                </a>
-                            </li>
-                        @else
-                            {{-- @foreach ($current_nav_mains as $item)
-                                @if ($item->link == '#')
-                                    <li class="nav-item {{ request()->is(''.$item->aktif.'/*') ? 'menu-open' : '' }}">
-                                        <a href="#" class="nav-link {{ request()->is(''.$item->aktif.'/*') ? 'active' : '' }}">
-                                            <i class="nav-icon {{ $item->icon }} text-center mr-2" style="width: 30px;"></i> <p>{{ $item->title }}<i class="right fas fa-angle-left"></i></p>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-                                            @foreach ($current_menus as $item_menu)
-                                                @if ($item_menu->main_id == $item->id)
-                                                    <li class="nav-item">
-                                                        <a href="{{ route($item_menu->navSub->link) }}" class="nav-link {{ request()->is([''.$item_menu->navSub->aktif.'', ''.$item_menu->navSub->aktif.'/*']) ? 'active' : '' }}">
-                                                            <i class="fas fa-angle-right nav-icon"></i> <p>{{ $item_menu->navSub->title }}</p>
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    </li>
-                                @else
-                                    <li class="nav-item">
-                                        <a href="{{ route($item->link) }}" class="nav-link {{ request()->is([''.$item->aktif.'', ''.$item->aktif.'/*']) ? 'active' : '' }}">
-                                            <i class="nav-icon {{ $item->icon }} text-center mr-2" style="width: 30px;"></i> <p>{{ $item->title }}</p>
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach --}}
-                        @endif
+                        @foreach ($current_nav_button as $item)
+                            @if ($item->navMain->link == '#')
+                                <li class="nav-item ">
+                                    <a href="#" class="nav-link ">
+                                        <i class="nav-icon {{ $item->navMain->icon }} text-center mr-2" style="width: 30px;"></i> <p>{{ $item->navMain->title }}<i class="right fas fa-angle-left"></i></p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        @foreach ($current_nav_button_sub as $item_sub)
+                                            @if ($item_sub->navSub->link != '#' && $item_sub->navSub->main_id == $item->navMain->id)
+                                                <li class="nav-item">
+                                                    <a href="{{ route($item_sub->navSub->link) }}" class="nav-link {{ request()->is([''.$item_sub->navSub->aktif.'', ''.$item_sub->navSub->aktif.'/*']) ? 'active' : '' }}">
+                                                        <i class="fas fa-angle-right nav-icon"></i> <p>{{ $item_sub->navSub->title }}</p>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a href="{{ route($item->navMain->link) }}" class="nav-link ">
+                                        <i class="nav-icon {{ $item->navMain->icon }} text-center mr-2" style="width: 30px;"></i> <p>{{ $item->navMain->title }}</p>
+                                    </a>
+                                </li>
+                            @endif
+                        @endforeach
                     </ul>
                 </nav>
-                <!-- /.sidebar-menu -->
             </div>
-            <!-- /.sidebar -->
         </aside>
 
         @yield('content')

@@ -53,6 +53,7 @@
                                     <tr>
                                         <th class="text-center text-indigo">No</th>
                                         <th class="text-center text-indigo">Nama</th>
+                                        <th class="text-center text-indigo">Email</th>
                                         <th class="text-center text-indigo">Aksi</th>
                                     </tr>
                                 </thead>
@@ -61,6 +62,7 @@
                                         <tr>
                                             <td class="text-center">{{ $key + 1 }}</td>
                                             <td>{{ $item->name }}</td>
+                                            <td>{{ $item->email }}</td>
                                             <td class="text-center">
                                                 <div class="btn-group">
                                                     <a
@@ -74,9 +76,9 @@
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a
                                                             href="#"
-                                                            class="dropdown-item border-bottom btn-edit"
+                                                            class="dropdown-item btn-access"
                                                             data-id="{{ $item->id }}">
-                                                                <i class="fas fa-pencil-alt pr-1"></i> Ubah
+                                                                <i class="fas fa-lock pr-1"></i> Akses
                                                         </a>
                                                         <a
                                                             href="#"
@@ -114,7 +116,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="create_nama" class="form-label">Nama</label>
-                        <select name="create_name" id="create_nama" class="form-control create_nama_select2"></select>
+                        <select name="create_nama" id="create_nama" class="form-control create_nama_select2"></select>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -131,35 +133,36 @@
     </div>
 </div>
 
-<div class="modal fade modal-edit" id="modal-default">
-    <div class="modal-dialog">
+{{-- modal access --}}
+<div class="modal fade modal-access" id="modal-default">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <form id="form-edit">
-                <input type="hidden" id="edit_id" name="edit_id">
-                <div class="modal-header">
-                    <h4 class="modal-title">Ubah Data Cabang</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+            <form id="form-access">
+
+                {{-- karyawan id --}}
+                <input type="hidden" name="access_karyawan_id" id="access_karyawan_id">
+
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="edit_nama" class="form-label">Nama Cabang</label>
-                        <input type="text"
-                            class="form-control form-control-sm"
-                            id="edit_nama"
-                            name="edit_nama"
-                            maxlength="30"
-                            required>
-                    </div>
+                    <table id="datatable" class="table table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center text-indigo">Main</th>
+                                <th class="text-center text-indigo">Sub</th>
+                                <th class="text-center text-indigo">Button</th>
+                                <th class="text-center text-indigo">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data_navigasi">
+                        </tbody>
+                    </table>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button class="btn btn-primary btn-spinner-edit" disabled style="width: 130px; display: none;">
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-access-spinner d-none" disabled style="width: 130px;">
                         <span class="spinner-grow spinner-grow-sm"></span>
                         Loading...
                     </button>
-                    <button type="submit" class="btn btn-primary btn-edit-save" style="width: 130px;">
-                        <i class="fas fa-save"></i> Perbaharui
+                    <button type="submit" class="btn btn-primary btn-access-save" style="width: 130px;">
+                        <i class="fas fa-save"></i> Simpan
                     </button>
                 </div>
             </form>
@@ -169,7 +172,7 @@
 
 {{-- modal delete --}}
 <div class="modal fade modal-delete" id="modal-default">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form id="form-delete">
                 <input type="hidden" id="delete_id" name="delete_id">
@@ -178,7 +181,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button class="btn btn-danger" type="button" data-dismiss="modal" style="width: 130px;"><span aria-hidden="true">Tidak</span></button>
-                    <button class="btn btn-primary btn-delete-spinner" disabled style="width: 130px; display: none;">
+                    <button class="btn btn-primary btn-delete-spinner d-none" disabled style="width: 130px;">
                         <span class="spinner-grow spinner-grow-sm"></span>
                         Loading...
                     </button>
@@ -229,8 +232,10 @@
             timer: 3000
         });
 
+        // create
         $('#btn-create').on('click', function(e) {
             e.preventDefault();
+            $('#create_nama').empty();
 
             $.ajax({
                 url: "{{ URL::route('user.create') }}",
@@ -305,7 +310,147 @@
             });
         });
 
+        // access
+        $(document).on('click', '.btn-access', function(e) {
+            e.preventDefault();
+            $('#data_navigasi').empty();
 
+            var id = $(this).attr('data-id');
+            var url = '{{ route("user.access", ":id") }}';
+            url = url.replace(':id', id);
+
+            $.ajax({
+                url: url,
+                type: "get",
+                success: function (response) {
+                    $('#access_karyawan_id').val(response.karyawan_id);
+
+                    let val_navigasi = '';
+                    $.each(response.nav_mains, function (index, iteme) {
+                        val_navigasi += '' +
+                            '<tr>' +
+                                '<td rowspan="' + iteme.nav_button.length + '" style="padding: 5px;">' + iteme.title + '</td>';
+                                $.each(iteme.nav_sub, function (index, item) {
+                                    val_navigasi += '' +
+                                        '<td rowspan="' + item.nav_button.length + '" style="padding: 5px;">';
+                                            if (item.title != iteme.title) {
+                                                val_navigasi += item.title;
+                                            }
+                                    val_navigasi += '</td>';
+                                    $.each(item.nav_button, function (index, item_nav_button) {
+                                        val_navigasi += '' +
+                                            '<td style="padding: 5px;">' +
+                                                item_nav_button.title +
+                                            '</td>' +
+                                            '<td class="text-center" style="padding: 5px;">' +
+                                                '<input type="checkbox" id="button_check_ ' + item_nav_button.id + '" name="button_check[]" value="' + item_nav_button.id + '"';
+                                                $.each(response.nav_access, function (index, item_nav_access) {
+                                                    if (item_nav_access.nav_button_id == item_nav_button.id) {
+                                                        val_navigasi += ' checked';
+                                                    }
+                                                })
+                                                val_navigasi += '>' +
+                                            '</td>' +
+                                        '</tr>';
+                                    })
+                                    val_navigasi += '</tr>';
+                                })
+                                val_navigasi += '</tr>';
+                    })
+                    $('#data_navigasi').append(val_navigasi);
+
+                    $('.modal-access').modal('show');
+                }
+            })
+        });
+
+        $(document).on('submit', '#form-access', function (e) {
+            e.preventDefault();
+
+            let val_check = [];
+            $('input[name="button_check[]"]:checked').each(function() {
+                data_check = this.value;
+                val_check.push(data_check);
+            });
+
+            let formData = {
+                data_navigasi: val_check,
+                karyawan_id: $('#access_karyawan_id').val()
+            }
+
+            $.ajax({
+                url: "{{ URL::route('user.access_store') }}",
+                type: "post",
+                data: formData,
+                beforeSend: function () {
+                    $('.btn-access-spinner').removeClass('d-none');
+                    $('.btn-access-save').addClass('d-none');
+                },
+                success: function (response) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data berhasil disimpan'
+                    });
+
+                    setTimeout( () => {
+                        window.location.reload(1);
+                    }, 1000);
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.status + ': ' + error
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Error - ' + errorMessage
+                    });
+                }
+            })
+        })
+
+        // delete
+        $('body').on('click', '.btn-delete', function (e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+
+            $('#delete_id').val(id);
+            $('.modal-delete').modal('show');
+        });
+
+        $('#form-delete').submit(function (e) {
+            e.preventDefault();
+
+            var formData = {
+                id: $('#delete_id').val()
+            }
+
+            $.ajax({
+                url: "{{ URL::route('user.delete') }}",
+                type: 'POST',
+                data: formData,
+                beforeSend: function () {
+                    $('.btn-delete-spinner').removeClass('d-none');
+                    $('.btn-delete-yes').addClass('d-none');
+                },
+                success: function (response) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data berhasil dihapus'
+                    });
+
+                    setTimeout( () => {
+                        window.location.reload(1);
+                    }, 1000);
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.status + ': ' + error
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Error - ' + errorMessage
+                    });
+                }
+            });
+        });
     });
 </script>
 

@@ -28,10 +28,16 @@ Auth::routes([
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('access', [AccessController::class, 'index'])->name('access');
+    Route::get('access', [AccessController::class, 'index'])->name('access'); // backup
 
     // user
     Route::get('user', [UserController::class, 'index'])->name('user.index');
     Route::get('user/create', [UserController::class, 'create'])->name('user.create');
     Route::post('user/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('user/{id}/access', [UserController::class, 'access'])->name('user.access');
+    Route::post('user/access_store', [UserController::class, 'accessStore'])->name('user.access_store');
+    Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
+
+    // navigasi
+    // Route::get('navigasi', [])
 });
