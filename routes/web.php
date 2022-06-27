@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AccessController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\NavigasiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,14 +33,48 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware' => 'auth'], function () {
     Route::get('access', [AccessController::class, 'index'])->name('access'); // backup
 
-    // user
-    Route::get('user', [UserController::class, 'index'])->name('user.index');
-    Route::get('user/create', [UserController::class, 'create'])->name('user.create');
-    Route::post('user/store', [UserController::class, 'store'])->name('user.store');
-    Route::get('user/{id}/access', [UserController::class, 'access'])->name('user.access');
-    Route::post('user/access_store', [UserController::class, 'accessStore'])->name('user.access_store');
-    Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
+    // dashboard
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-    // navigasi
-    // Route::get('navigasi', [])
+    // master
+        // navgasi
+        Route::get('master/navigasi', [NavigasiController::class, 'index'])->name('navigasi.index');
+        Route::post('master/navigasi/main_store', [NavigasiController::class, 'mainStore'])->name('navigasi.main_store');
+        Route::get('master/navigasi/{id}/main_edit', [NavigasiController::class, 'mainEdit'])->name('navigasi.main_edit');
+        Route::post('master/navigasi/main_update', [NavigasiController::class, 'mainUpdate'])->name('navigasi.main_update');
+        Route::get('master/navigasi/{id}/main_delete_btn', [NavigasiController::class, 'mainDeleteBtn'])->name('navigasi.main_delete_btn');
+        Route::post('master/navigasi/main_delete', [NavigasiController::class, 'mainDelete'])->name('navigasi.main_delete');
+
+        // navigasi sub
+        Route::get('master/navigasi/sub_create', [NavigasiController::class, 'subCreate'])->name('navigasi.sub_create');
+        Route::post('master/navigasi/sub_store', [NavigasiController::class, 'subStore'])->name('navigasi.sub_store');
+        Route::get('master/navigasi/{id}/sub_edit', [NavigasiController::class, 'subEdit'])->name('navigasi.sub_edit');
+        Route::post('master/navigasi/sub_update', [NavigasiController::class, 'subUpdate'])->name('navigasi.sub_update');
+        Route::get('master/navigasi/{id}/sub_delete_btn', [NavigasiController::class, 'subDeleteBtn'])->name('navigasi.sub_delete_btn');
+        Route::post('master/navigasi/sub_delete', [NavigasiController::class, 'subDelete'])->name('navigasi.sub_delete');
+
+        // navigasi tombol
+        Route::get('master/navigasi/tombol_create', [NavigasiController::class, 'tombolCreate'])->name('navigasi.tombol_create');
+        Route::post('master/navigasi/tombol_store', [NavigasiController::class, 'tombolStore'])->name('navigasi.tombol_store');
+        Route::get('master/navigasi/{id}/tombol_edit', [NavigasiController::class, 'tombolEdit'])->name('navigasi.tombol_edit');
+        Route::post('master/navigasi/tombol_update', [NavigasiController::class, 'tombolUpdate'])->name('navigasi.tombol_update');
+        Route::get('master/navigasi/{id}/tombol_delete_btn', [NavigasiController::class, 'tombolDeleteBtn'])->name('navigasi.tombol_delete_btn');
+        Route::post('master/navigasi/tombol_delete', [NavigasiController::class, 'tombolDelete'])->name('navigasi.tombol_delete');
+
+        // user
+        Route::get('master/user', [UserController::class, 'index'])->name('user.index');
+        Route::get('master/user/create', [UserController::class, 'create'])->name('user.create');
+        Route::post('master/user/store', [UserController::class, 'store'])->name('user.store');
+        Route::get('master/user/{id}/access', [UserController::class, 'access'])->name('user.access');
+        Route::post('master/user/access_store', [UserController::class, 'accessStore'])->name('user.access_store');
+        Route::post('master/user/delete', [UserController::class, 'delete'])->name('user.delete');
+
+    // customer
+    Route::get('customer', [CustomerController::class, 'index'])->name('customer.index');
+    Route::get('customer/create', [CustomerController::class, 'create'])->name('customer.create');
+    Route::post('customer/store', [CustomerController::class, 'store'])->name('customer.store');
+    Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
+    Route::post('customer/update', [CustomerController::class, 'update'])->name('customer.update');
+    Route::get('customer/{id}/delete_btn', [CustomerController::class, 'deleteBtn'])->name('customer.delete_btn');
+    Route::post('customer/delete', [CustomerController::class, 'delete'])->name('customer.delete');
 });

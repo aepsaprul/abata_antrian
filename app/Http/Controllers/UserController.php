@@ -9,6 +9,7 @@ use App\Models\NavMain;
 use App\Models\NavSub;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +19,22 @@ class UserController extends Controller
     {
         $user = User::orderBy('id', 'desc')->get();
 
-        return view('pages.user.index', ['users' => $user]);
+        $navigasi = NavAccess::with('navButton')
+            ->whereHas('navButton.navSub', function ($query) {
+                $query->where('aktif', 'master/user');
+            })
+            ->where('karyawan_id', Auth::user()->master_karyawan_id)->get();
+
+        $data_navigasi = [];
+        foreach ($navigasi as $key => $value) {
+            $data_navigasi[] = $value->navButton->title;
+        }
+
+        return view('pages.master.user.index', [
+            'users' => $user,
+            'navigasi' => $navigasi,
+            'data_navigasi' => $data_navigasi
+        ]);
     }
 
     public function create()

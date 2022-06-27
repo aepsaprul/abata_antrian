@@ -134,8 +134,8 @@
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                         @foreach ($current_nav_button as $item)
                             @if ($item->navMain->link == '#')
-                                <li class="nav-item ">
-                                    <a href="#" class="nav-link ">
+                                <li class="nav-item {{ request()->is(''.$item->navMain->aktif.'/*') ? 'menu-open' : '' }}">
+                                    <a href="#" class="nav-link {{ request()->is(''.$item->navMain->aktif.'/*') ? 'active' : '' }}">
                                         <i class="nav-icon {{ $item->navMain->icon }} text-center mr-2" style="width: 30px;"></i> <p>{{ $item->navMain->title }}<i class="right fas fa-angle-left"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
@@ -152,7 +152,7 @@
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a href="{{ route($item->navMain->link) }}" class="nav-link ">
+                                    <a href="{{ route($item->navMain->link) }}" class="nav-link {{ request()->is([''.$item->navMain->aktif.'', ''.$item->navMain->aktif.'/*']) ? 'active' : '' }}">
                                         <i class="nav-icon {{ $item->navMain->icon }} text-center mr-2" style="width: 30px;"></i> <p>{{ $item->navMain->title }}</p>
                                     </a>
                                 </li>
