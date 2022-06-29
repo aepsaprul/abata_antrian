@@ -13,7 +13,15 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customer = MasterCustomer::orderBy('id', 'desc')->limit(1000)->get();
+        if (Auth::user()->master_karyawan_id != 0) {
+            $customer = MasterCustomer::where('master_cabang_id', Auth::user()->masterKaryawan->masterCabang->id)
+                ->orderBy('id', 'desc')
+                ->limit(1000)
+                ->get();
+        } else {
+            $customer = MasterCustomer::orderBy('id', 'desc')->limit(1000)->get();
+        }
+
 
         $navigasi = NavAccess::with('navButton')
             ->whereHas('navButton.navSub', function ($query) {

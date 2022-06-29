@@ -45,17 +45,6 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                        <i class="fas fa-expand-arrows-alt"></i>
-                    </a>
-                </li>
                 <li class="nav-item dropdown">
                     <a
                         class="nav-link dropdown-toggle"
@@ -65,18 +54,6 @@
                             <i class="fa fa-user-circle"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a
-                            class="dropdown-item"
-                            href="#">
-                                <i class="fa fa-id-card px-2"></i> Profil
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a
-                            class="dropdown-item"
-                            href="#">
-                                <i class="fa fa-lock-open px-2"></i> Ubah Password
-                        </a>
-                        <div class="dropdown-divider"></div>
                         <a
                             class="dropdown-item"
                             href="{{ route('logout') }}"
@@ -135,14 +112,14 @@
                         @foreach ($current_nav_button as $item)
                             @if ($item->navMain->link == '#')
                                 <li class="nav-item {{ request()->is(''.$item->navMain->aktif.'/*') ? 'menu-open' : '' }}">
-                                    <a href="#" class="nav-link {{ request()->is(''.$item->navMain->aktif.'/*') ? 'active' : '' }}">
+                                    <a href="#" class="nav-link {{ request()->is(''.$item->navMain->aktif.'/*') ? 'active' : '' }} text-capitalize">
                                         <i class="nav-icon {{ $item->navMain->icon }} text-center mr-2" style="width: 30px;"></i> <p>{{ $item->navMain->title }}<i class="right fas fa-angle-left"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
                                         @foreach ($current_nav_button_sub as $item_sub)
                                             @if ($item_sub->navSub->link != '#' && $item_sub->navSub->main_id == $item->navMain->id)
                                                 <li class="nav-item">
-                                                    <a href="{{ route($item_sub->navSub->link) }}" class="nav-link {{ request()->is([''.$item_sub->navSub->aktif.'', ''.$item_sub->navSub->aktif.'/*']) ? 'active' : '' }}">
+                                                    <a href="{{ route($item_sub->navSub->link) }}" class="nav-link {{ request()->is([''.$item_sub->navSub->aktif.'', ''.$item_sub->navSub->aktif.'/*']) ? 'active' : '' }} text-capitalize">
                                                         <i class="fas fa-angle-right nav-icon"></i> <p>{{ $item_sub->navSub->title }}</p>
                                                     </a>
                                                 </li>
@@ -152,7 +129,7 @@
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a href="{{ route($item->navMain->link) }}" class="nav-link {{ request()->is([''.$item->navMain->aktif.'', ''.$item->navMain->aktif.'/*']) ? 'active' : '' }}">
+                                    <a href="{{ route($item->navMain->link) }}" class="nav-link {{ request()->is([''.$item->navMain->aktif.'', ''.$item->navMain->aktif.'/*']) ? 'active' : '' }} text-capitalize">
                                         <i class="nav-icon {{ $item->navMain->icon }} text-center mr-2" style="width: 30px;"></i> <p>{{ $item->navMain->title }}</p>
                                     </a>
                                 </li>

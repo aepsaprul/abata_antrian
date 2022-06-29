@@ -3,8 +3,11 @@
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DisplayCustomerController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\NavigasiController;
+use App\Http\Controllers\PageCustomerController;
+use App\Http\Controllers\SitumpurController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -77,4 +80,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('customer/update', [CustomerController::class, 'update'])->name('customer.update');
     Route::get('customer/{id}/delete_btn', [CustomerController::class, 'deleteBtn'])->name('customer.delete_btn');
     Route::post('customer/delete', [CustomerController::class, 'delete'])->name('customer.delete');
+
+    // situmpur
+        // customer
+        Route::get('situmpur/page_customer', [SitumpurController::class, 'customer'])->name('situmpur_customer');
+        Route::get('situmpur/page_customer/{id}/form', [SitumpurController::class, 'customerForm'])->name('situmpur_customer.form');
+        Route::post('situmpur/page_customer/search', [SitumpurController::class, 'customerSearch'])->name('situmpur_customer.search');
+        Route::post('situmpur/page_customer/store', [SitumpurController::class, 'customerStore'])->name('situmpur.customer.store');
 });
