@@ -87,4 +87,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('situmpur/page_customer/{id}/form', [SitumpurController::class, 'customerForm'])->name('situmpur_customer.form');
         Route::post('situmpur/page_customer/search', [SitumpurController::class, 'customerSearch'])->name('situmpur_customer.search');
         Route::post('situmpur/page_customer/store', [SitumpurController::class, 'customerStore'])->name('situmpur.customer.store');
+
+        // desain
+        Route::get('situmpur/page_desain', [SitumpurController::class, 'desain'])->name('situmpur_desain');
+        Route::get('situmpur/page_desain/nomor', [SitumpurController::class, 'desainNomor'])->name('situmpur_desain.nomor');
+        Route::get('situmpur/page_desain/{nomor}/panggil', [SitumpurController::class, 'desainPanggil'])->name('situmpur_desain.panggil');
+        Route::get('situmpur/page_desain/{nomor}/jenis/{nama_jenis}', [SitumpurController::class, 'desainUpdate'])->name('situmpur_desain.update');
+        Route::get('situmpur/page_desain/{nomor}/batal', [SitumpurController::class, 'desainBatal'])->name('situmpur_desain.batal');
+        Route::get('situmpur/page_desain/{nomor}/mulai', [SitumpurController::class, 'desainMulai'])->name('situmpur_desain.mulai');
+        Route::get('situmpur/page_desain/mulai/counter', [SitumpurController::class, 'desainMulaiCounter'])->name('situmpur_desain.mulai.counter');
+        Route::get('situmpur/page_desain/{nomor}/selesai', [SitumpurController::class, 'desainSelesai'])->name('situmpur_desain.selesai');
 });
