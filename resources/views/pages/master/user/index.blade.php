@@ -55,6 +55,8 @@
                                     <tr>
                                         <th class="text-center text-indigo">No</th>
                                         <th class="text-center text-indigo">Nama</th>
+                                        <th class="text-center text-indigo">Jabatan</th>
+                                        <th class="text-center text-indigo">Cabang</th>
                                         <th class="text-center text-indigo">Email</th>
                                         <th class="text-center text-indigo">Aksi</th>
                                     </tr>
@@ -64,6 +66,20 @@
                                         <tr>
                                             <td class="text-center">{{ $key + 1 }}</td>
                                             <td>{{ $item->name }}</td>
+                                            <td>
+                                                @if ($item->karyawan)
+                                                    @foreach ($antrian_users as $antrian_user)
+                                                        @if ($antrian_user->karyawan_id == $item->master_karyawan_id)
+                                                            <span class="text-capitalize">{{ $antrian_user->jabatan }} {{ $antrian_user->nomor }}</span>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($item->karyawan)
+                                                    {{ $item->karyawan->cabang->nama_cabang }}
+                                                @endif
+                                            </td>
                                             <td>{{ $item->email }}</td>
                                             <td class="text-center">
                                                 <div class="btn-group">
@@ -78,12 +94,20 @@
                                                         </a>
                                                     @endif
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        @if (in_array("ubah", $data_navigasi))
+                                                        @if (in_array("akses", $data_navigasi))
                                                             <a
                                                                 href="#"
                                                                 class="dropdown-item btn-access"
                                                                 data-id="{{ $item->id }}">
                                                                     <i class="fas fa-lock pr-1"></i> Akses
+                                                            </a>
+                                                        @endif
+                                                        @if (in_array("ubah", $data_navigasi))
+                                                            <a
+                                                                href="#"
+                                                                class="dropdown-item btn-edit"
+                                                                data-id="{{ $item->id }}">
+                                                                    <i class="fas fa-edit pr-1"></i> Ubah
                                                             </a>
                                                         @endif
                                                         @if (in_array("hapus", $data_navigasi))
@@ -112,7 +136,7 @@
 
 {{-- modal create --}}
 <div class="modal fade modal-create" id="modal-default">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form id="form-create">
                 <div class="modal-header">
@@ -171,6 +195,49 @@
                     </button>
                     <button type="submit" class="btn btn-primary btn-access-save" style="width: 130px;">
                         <i class="fas fa-save"></i> Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- modal edit --}}
+<div class="modal fade modal-edit" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="form-edit">
+                <div class="modal-header">
+                    <h4 class="modal-title">Ubah Data User</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    {{-- karyawan id --}}
+                    <input type="hidden" name="edit_id" id="edit_id">
+
+                    <div class="mb-3">
+                        <label for="edit_nama" class="form-label">Nama</label>
+                        <input type="text" name="edit_nama" id="edit_nama" class="form-control" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_jabatan" class="form-label">Jabatan</label>
+                        <select name="edit_jabatan" id="edit_jabatan" class="form-control"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_nomor" class="form-label">Nomor</label>
+                        <input type="number" name="edit_nomor" id="edit_nomor" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button class="btn btn-primary btn-edit-spinner d-none" disabled style="width: 130px;">
+                        <span class="spinner-grow spinner-grow-sm"></span>
+                        Loading...
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-edit-save" style="width: 130px;">
+                        <i class="fas fa-save"></i> Perbaharui
                     </button>
                 </div>
             </form>
@@ -253,7 +320,14 @@
 
                     let val_karyawan = '<option value="">--Pilih Karyawan--</option>';
                     $.each(response.karyawans, function (index, item) {
-                        val_karyawan += '<option value="' + item.id + '">' + item.nama_lengkap + '</option>';
+                        val_karyawan += '<option value="' + item.id + '">' + item.nama_lengkap;
+                            if (item.jabatan) {
+                                val_karyawan += ' - ' + item.jabatan.nama_jabatan;
+                            }
+                            if (item.cabang) {
+                                val_karyawan += ' - ' + item.cabang.nama_cabang;
+                            }
+                        val_karyawan +='</option>';
                     })
                     $('#create_nama').append(val_karyawan);
 
@@ -414,6 +488,81 @@
                 }
             })
         })
+
+        // edit
+        $(document).on('click', '.btn-edit', function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr('data-id');
+            var url = '{{ route("user.edit", ":id") }}';
+            url = url.replace(':id', id);
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    $('#edit_id').val(response.user.id);
+                    $('#edit_nama').val(response.user.name);
+                    $('#edit_nomor').val(response.antrian_user.nomor);
+
+                    let val_jabatan = '' +
+                        '<option value="">--Pilih Jabatan</option>' +
+                        '<option value="desain"';
+                        if (response.antrian_user.jabatan == "desain") {
+                            val_jabatan += ' selected';
+                        }
+                        val_jabatan += '>desain</option>' +
+                        '<option value="cs"';
+                        if (response.antrian_user.jabatan == "cs") {
+                            val_jabatan += ' selected';
+                        }
+                        val_jabatan += '>cs</option>';
+
+                    $('#edit_jabatan').append(val_jabatan);
+
+                    $('.modal-edit').modal('show');
+                }
+            })
+        })
+
+        $(document).on('submit', '#form-edit', function (e) {
+            e.preventDefault();
+
+            var formData = {
+                id: $('#edit_id').val(),
+                nama: $('#edit_nama').val(),
+                jabatan: $('#edit_jabatan').val(),
+                nomor: $('#edit_nomor').val()
+            }
+
+            $.ajax({
+                url: "{{ URL::route('user.update') }}",
+                type: 'post',
+                data: formData,
+                beforeSend: function () {
+                    $('.btn-edit-spinner').removeClass("d-none");
+                    $('.btn-edit-save').addClass("d-none");
+                },
+                success: function (response) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data berhasil diperbaharui'
+                    });
+
+                    setTimeout( () => {
+                        window.location.reload(1);
+                    }, 1000);
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.status + ': ' + error
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Error - ' + errorMessage
+                    });
+                }
+            });
+        });
 
         // delete
         $('body').on('click', '.btn-delete', function (e) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SitumpurDesainPanggil;
 use App\Models\AntrianPengunjung;
 use App\Models\AntrianSementara;
 use App\Models\Karyawan;
@@ -155,6 +156,8 @@ class SitumpurController extends Controller
         $antrian_sementara->karyawan_id = Auth::user()->master_karyawan_id;
         $antrian_sementara->save();
 
+        event(new SitumpurDesainPanggil(1,2));
+
         return redirect()->route('situmpur_desain');
     }
 
@@ -229,5 +232,11 @@ class SitumpurController extends Controller
         $antrian_sementara->save();
 
         return redirect()->route('situmpur_desain');
+    }
+
+    // display
+    public function display()
+    {
+        return view('pages.situmpur.display');
     }
 }

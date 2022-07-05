@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('master/user', [UserController::class, 'index'])->name('user.index');
         Route::get('master/user/create', [UserController::class, 'create'])->name('user.create');
         Route::post('master/user/store', [UserController::class, 'store'])->name('user.store');
+        Route::get('master/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+        Route::post('master/user/update', [UserController::class, 'update'])->name('user.update');
         Route::get('master/user/{id}/access', [UserController::class, 'access'])->name('user.access');
         Route::post('master/user/access_store', [UserController::class, 'accessStore'])->name('user.access_store');
         Route::post('master/user/delete', [UserController::class, 'delete'])->name('user.delete');
@@ -97,4 +99,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('situmpur/page_desain/{nomor}/mulai', [SitumpurController::class, 'desainMulai'])->name('situmpur_desain.mulai');
         Route::get('situmpur/page_desain/mulai/counter', [SitumpurController::class, 'desainMulaiCounter'])->name('situmpur_desain.mulai.counter');
         Route::get('situmpur/page_desain/{nomor}/selesai', [SitumpurController::class, 'desainSelesai'])->name('situmpur_desain.selesai');
+
+        // display
+        Route::get('situmpur/page_display', [SitumpurController::class, 'display'])->name('situmpur_display');
 });

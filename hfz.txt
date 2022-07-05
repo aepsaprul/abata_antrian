@@ -1,2 +1,7 @@
 - tambah akun situmpur
 - mpRoot@administrator01
+
+solusi .play() error
+- klik tanda seru sebelah kiri url
+- izinkan pop-up & pengahlihan
+- izinkan suara

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AntrianUser;
 use App\Models\Karyawan;
 use App\Models\NavAccess;
 use App\Models\NavButton;
@@ -18,6 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $user = User::orderBy('id', 'desc')->get();
+        $antrian_user = AntrianUser::get();
 
         $navigasi = NavAccess::with('navButton')
             ->whereHas('navButton.navSub', function ($query) {
@@ -32,6 +34,7 @@ class UserController extends Controller
 
         return view('pages.master.user.index', [
             'users' => $user,
+            'antrian_users' => $antrian_user,
             'navigasi' => $navigasi,
             'data_navigasi' => $data_navigasi
         ]);
@@ -39,7 +42,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $karyawan = Karyawan::orderBy('master_cabang_id')->get();
+        $karyawan = Karyawan::with(['jabatan', 'cabang'])->orderBy('master_cabang_id')->get();
 
         return response()->json([
             'karyawans' => $karyawan
@@ -62,6 +65,10 @@ class UserController extends Controller
             $user->password = Hash::make("abataprinting");
             $user->master_karyawan_id = $karyawan->id;
             $user->save();
+
+            $antrian_user = new AntrianUser;
+            $antrian_user->karyawan_id = $karyawan->id;
+            $antrian_user->save();
 
             $status = "true";
             $keterangan = "Sukses";
@@ -132,9 +139,41 @@ class UserController extends Controller
         ]);
     }
 
+    public function edit($id)
+    {
+        $user = User::find($id);
+        $antrian_user = AntrianUser::where('karyawan_id', $user->master_karyawan_id)->first();
+
+        return response()->json([
+            'user' => $user,
+            'antrian_user' => $antrian_user
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $user = User::find($request->id);
+
+        $antrian_user = AntrianUser::where('karyawan_id', $user->master_karyawan_id)->first();
+        $antrian_user->jabatan = $request->jabatan;
+        $antrian_user->nomor = $request->nomor;
+        $antrian_user->save();
+
+        return response()->json([
+            'status' => 'true'
+        ]);
+    }
+
     public function delete(Request $request)
     {
         $user = User::find($request->id);
+
+        $antrian_user = AntrianUser::where('karyawan_id', $user->master_karyawan_id)->first();
+        $antrian_user->delete();
+
+        $nav_access = NavAccess::where('karyawan_id', $user->master_karyawan_id);
+        $nav_access->delete();
+
         $user->delete();
 
         return response()->json([
