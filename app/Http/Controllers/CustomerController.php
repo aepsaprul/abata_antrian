@@ -14,7 +14,7 @@ class CustomerController extends Controller
     public function index()
     {
         if (Auth::user()->master_karyawan_id != 0) {
-            $customer = MasterCustomer::where('master_cabang_id', Auth::user()->masterKaryawan->masterCabang->id)
+            $customer = MasterCustomer::where('master_cabang_id', Auth::user()->karyawan->master_cabang_id)
                 ->orderBy('id', 'desc')
                 ->limit(1000)
                 ->get();

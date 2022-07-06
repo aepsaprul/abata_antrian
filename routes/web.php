@@ -89,10 +89,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('situmpur/page_customer/{id}/form', [SitumpurController::class, 'customerForm'])->name('situmpur_customer.form');
         Route::post('situmpur/page_customer/search', [SitumpurController::class, 'customerSearch'])->name('situmpur_customer.search');
         Route::post('situmpur/page_customer/store', [SitumpurController::class, 'customerStore'])->name('situmpur.customer.store');
+        Route::get('situmpur/reset_antrian', [SitumpurController::class, 'resetAntrian'])->name('situmpur_reset_antrian');
 
         // desain
         Route::get('situmpur/page_desain', [SitumpurController::class, 'desain'])->name('situmpur_desain');
         Route::get('situmpur/page_desain/nomor', [SitumpurController::class, 'desainNomor'])->name('situmpur_desain.nomor');
+        Route::get('situmpur/page_desain/{id}/on', [SitumpurController::class, 'desainOn'])->name('situmpur_desain.on');
+        Route::get('situmpur/page_desain/{id}/off', [SitumpurController::class, 'desainOff'])->name('situmpur_desain.off');
         Route::get('situmpur/page_desain/{nomor}/panggil', [SitumpurController::class, 'desainPanggil'])->name('situmpur_desain.panggil');
         Route::get('situmpur/page_desain/{nomor}/jenis/{nama_jenis}', [SitumpurController::class, 'desainUpdate'])->name('situmpur_desain.update');
         Route::get('situmpur/page_desain/{nomor}/batal', [SitumpurController::class, 'desainBatal'])->name('situmpur_desain.batal');

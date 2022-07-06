@@ -10,24 +10,23 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SitumpurDesainPanggil implements ShouldBroadcast
+class SitumpurDesainStatus implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $desain_nomor;
-    public $antrian_nomor;
-    public $antrian_menunggu;
-
+    public $status;
+    public $nama_desain;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($desain_nomor, $antrian_nomor, $antrian_menunggu)
+    public function __construct($desain_nomor,$status,$nama_desain)
     {
         $this->desain_nomor = $desain_nomor;
-        $this->antrian_nomor = $antrian_nomor;
-        $this->antrian_menunggu = $antrian_menunggu;
+        $this->status = $status;
+        $this->nama_desain = $nama_desain;
     }
 
     /**
@@ -37,11 +36,11 @@ class SitumpurDesainPanggil implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['desain-panggil'];
+        return ['desain-status'];
     }
 
     public function broadcastAs()
     {
-        return 'desain-panggil-event';
+        return 'desain-status-event';
     }
 }

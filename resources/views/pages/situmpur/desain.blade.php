@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('style')
-
-@endsection
-
 @section('content')
 
 <!-- Content Wrapper. Contains page content -->
@@ -12,17 +8,16 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-			<h3>HALAMAN DESAINER {{ Auth::user()->name }}</h3>
+			<h3 class="text-center">DESAINER {{ Auth::user()->name }}</h3>
 			<p style="text-align: center;">
-				{{-- {{dd($karyawan)}} --}}
-				{{-- @if ($karyawan->pbgDesain->status == "off")
-					<a href="{{ url('pbg/antrian/desain/' . $karyawan->pbgDesain->id . '/on') }}" class="btn btn-danger">Komputer OFF</a>
+				@if ($antrian_user->status == "off")
+					<a href="{{ url('situmpur/page_desain/' . Auth::user()->master_karyawan_id . '/on') }}" class="btn btn-danger">Komputer OFF</a>
 				@else
-					<a href="{{ url('pbg/antrian/desain/' . $karyawan->pbgDesain->id . '/off') }}" class="btn btn-success">Komputer ON</a>
-				@endif --}}
+					<a href="{{ url('situmpur/page_desain/' . Auth::user()->master_karyawan_id . '/off') }}" class="btn btn-success">Komputer ON</a>
+				@endif
 			</p>
 			<p style="text-align: center;">
-				<span class="stopwatch">00:00:00</span>
+				<span class="stopwatch h3">00:00:00</span>
 			</p>
 			<hr>
 			<div class="row">
@@ -47,6 +42,69 @@
 @endsection
 
 @section('script')
+<script src="https://js.pusher.com/7.1/pusher.min.js"></script>
+<script>
+    // Enable pusher logging - don't include this in production
+    // Pusher.logToConsole = true;
+
+    var pusher = new Pusher('07d3c75f0970790e45c6', {
+        cluster: 'ap1'
+    });
+
+    var customer_desain = pusher.subscribe('customer-desain');
+    customer_desain.bind('customer-desain-event', function(data) {
+        if (data.customer_filter_id == 1) {
+            var title_filter = "File Siap";
+        } else {
+            var title_filter = "Desain / Edit";
+        }
+        var queryNomorAntrian = "" +
+            '<div class="col-3">' +
+                '<div class="card">' +
+                    '<div class="card-header">' +
+                        '<h6 class="text-uppercase text-center">antrian</h6>' +
+                    '</div>' +
+                    '<div class="card-body text-center">' +
+                        '<span class="text-uppercase font-weight-bold" style="font-size: 50px;">' + data.nomor_antrian + '</span><br>' +
+                        '<span class="text-uppercase">' + data.nama + '</span><br>' +
+                        '<span class="text-uppercase">' + title_filter + '</span>' +
+                        '<br><span class="text-uppercase text-danger">-</span>' +
+                    '</div>' +
+                    '<div class="card-footer">' +
+                        '<div class="d-flex justify-content-center">' +
+                            '<a href="page_desain/' + data.nomor_antrian + '/panggil" class="btn btn-primary" style="width: 50px;" title="Panggil"><i class="fas fa-phone"></i></a>' +
+                        '</div>'
+                    '</div>' +
+                '</div>' +
+            '</div>';
+
+        $('.data-nomor').append(queryNomorAntrian);
+
+        if (Notification.permission === "granted") {
+            showNotification();
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    showNotification();
+                }
+            });
+        }
+
+        function showNotification() {
+            const notification = new Notification("Ada pengunjung baru", {
+                body: "Buka halaman desain"
+            });
+
+            notification.onclick = (e) => {
+                window.location.href = "";
+            }
+        }
+
+        console.log(Notification.permission);
+    });
+
+</script>
+
 <script>
 	$(document).ready(function() {
 		$.ajaxSetup({
@@ -63,7 +121,6 @@
 				url: "{{ URL::route('situmpur_desain.nomor') }}",
 				type: 'GET',
 				success: function(response) {
-					console.log(response.data);
 					$.each(response.data, function(i, value) {
 
 						if (value.customer_filter_id == 1) {
@@ -83,7 +140,7 @@
                                             '<h6 class="text-uppercase text-center">antrian</h6>' +
                                         '</div>' +
                                         '<div class="card-body text-center">' +
-                                            '<span class="text-uppercase font-weight-bold" style="font-size: 50px;">d' + value.nomor_antrian + '</span><br>' +
+                                            '<span class="text-uppercase font-weight-bold" style="font-size: 50px;">' + value.nomor_antrian + '</span><br>' +
                                             '<span class="text-uppercase">' + value.nama_customer + '</span><br>' +
                                             '<span class="text-uppercase">' + title_filter + '</span>';
                                             if (value.status == 2) {
@@ -115,6 +172,7 @@
                                                 }
                                             }
                                             if (value.status == 2) {
+                                                start();
                                                 val_nomor_antrian += '' +
                                                     '<div class="d-flex justify-content-center">' +
                                                         '<a href="page_desain/' + value.nomor_antrian + '/selesai" class="btn btn-success" style="width: 50px;" title="Selesai"><i class="fas fa-check"></i></a>' +

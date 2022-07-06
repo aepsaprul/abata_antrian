@@ -36,6 +36,9 @@
                         {{-- <a href="{{ url('situmpur/page_customer/3/form') }}" class="btn-konsultasi btn btn-block btn-primary pt-3 pb-3 pr-5 pl-5" style="font-size: 2em; font-weight: bold;">
                             KONSULTASI CS
                         </a> --}}
+                        <div class="d-flex justify-content-center mt-5">
+                            <a href="{{ route('situmpur_reset_antrian') }}" class="btn btn-danger" onclick="confirm('Yakin akan di reset?')">Reset Antrian</a>
+                        </div>
                     </div>
                 </div>
             </div>

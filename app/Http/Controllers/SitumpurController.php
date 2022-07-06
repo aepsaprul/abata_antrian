@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SitumpurCustomerDesain;
+use App\Events\SitumpurCustomerDisplay;
 use App\Events\SitumpurDesainPanggil;
+use App\Events\SitumpurDesainSelesai;
+use App\Events\SitumpurDesainStatus;
 use App\Models\AntrianPengunjung;
 use App\Models\AntrianSementara;
+use App\Models\AntrianUser;
 use App\Models\Karyawan;
 use App\Models\MasterCustomer;
 use Carbon\Carbon;
@@ -78,12 +83,6 @@ class SitumpurController extends Controller
                 $customers->save();
             }
 
-            $nomor_antrian = $request->nomor_antrian;
-            $nama = $request->nama_customer;
-            $telepon = $request->telepon;
-            $customer_filter_id = $request->customer_filter_id;
-            $antrian_total = $request->nomor_antrian;
-
             $antrian_sementara = new AntrianSementara;
 
             // if ($request->customer_filter_id == '3') {
@@ -112,10 +111,18 @@ class SitumpurController extends Controller
             $antrian_sementara->nama_customer = $request->nama_customer;
             $antrian_sementara->telepon = $request->telepon;
             $antrian_sementara->customer_filter_id = $request->customer_filter_id;
-            $antrian_sementara->karyawan_id = Auth::user()->master_karyawan_id;
             $antrian_sementara->cabang_id = Auth::user()->karyawan->master_cabang_id;
             $antrian_sementara->keterangan = "desain";
             $antrian_sementara->save();
+
+            $nomor_antrian = $request->nomor_antrian;
+            $nama = $request->nama_customer;
+            $telepon = $request->telepon;
+            $customer_filter_id = $request->customer_filter_id;
+            $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
+
+            event(new SitumpurCustomerDesain($nomor_antrian,$nama,$telepon,$customer_filter_id));
+            event(new SitumpurCustomerDisplay($antrian_menunggu));
 
             // $antrianPengunjung->nomor_antrian = $request->nomor_antrian;
             // $antrianPengunjung->nama_customer = $request->nama_customer;
@@ -129,24 +136,64 @@ class SitumpurController extends Controller
         }
     }
 
+    public function resetAntrian()
+    {
+        AntrianSementara::truncate();
+
+        return redirect()->route('situmpur_customer');
+    }
+
     // desain
     public function desain()
     {
-        return view('pages.situmpur.desain');
+        $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
+
+        return view('pages.situmpur.desain', ['antrian_user' => $antrian_user]);
     }
 
     public function desainNomor()
     {
-        $nomors = AntrianSementara::where('keterangan', 'desain')
+        $nomors = AntrianSementara::with('karyawan')
+            ->where('keterangan', 'desain')
             ->where('cabang_id', Auth::user()->karyawan->master_cabang_id)
             ->where('status', '!=', '3')
-            ->with('karyawan')
             ->get();
 
         return response()->json([
             'success' => 'Success',
             'data' => $nomors
         ]);
+    }
+
+    public function desainOn($id)
+    {
+        $antrian_user = AntrianUser::where('karyawan_id', $id)->first();
+        $antrian_user->status = "on";
+        $antrian_user->save();
+
+        $desain_nomor = $antrian_user->nomor;
+        $status = "on";
+        $nama_desain = Auth::user()->karyawan->nama_panggilan;
+
+        event(new SitumpurDesainStatus($desain_nomor, $status, $nama_desain));
+
+
+        return redirect()->route('situmpur_desain');
+    }
+
+    public function desainOff($id)
+    {
+        $antrian_user = AntrianUser::where('karyawan_id', $id)->first();
+        $antrian_user->status = "off";
+        $antrian_user->save();
+
+        $desain_nomor = $antrian_user->nomor;
+        $status = "off";
+        $nama_desain = "";
+
+        event(new SitumpurDesainStatus($desain_nomor, $status, $nama_desain));
+
+        return redirect()->route('situmpur_desain');
     }
 
     public function desainPanggil($nomor)
@@ -156,7 +203,10 @@ class SitumpurController extends Controller
         $antrian_sementara->karyawan_id = Auth::user()->master_karyawan_id;
         $antrian_sementara->save();
 
-        event(new SitumpurDesainPanggil(1,2));
+        $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
+        $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
+
+        event(new SitumpurDesainPanggil($antrian_user->nomor, $nomor, $antrian_menunggu));
 
         return redirect()->route('situmpur_desain');
     }
@@ -180,6 +230,7 @@ class SitumpurController extends Controller
     {
         $antrian_sementara = AntrianSementara::where('keterangan', 'desain')->where('nomor_antrian', $nomor)->where('status', 1)->first();
         $antrian_sementara->status = 2;
+        $antrian_sementara->mulai = Carbon::now();
         $antrian_sementara->karyawan_id = Auth::user()->master_karyawan_id;
         $antrian_sementara->save();
 
@@ -197,39 +248,52 @@ class SitumpurController extends Controller
 
     public function desainSelesai($nomor)
     {
-        $pengunjung = AntrianPengunjung::where('nomor_antrian', $nomor)
-            ->where('jabatan', 'desain')->where('status', '0')
-            ->update([
-                'selesai' => Carbon::now(),
-                'master_karyawan_id' => Auth::user()->master_karyawan_id,
-                'master_cabang_id' => Auth::user()->karyawan->cabang_id,
-                'status' => 3,
-                'tanggal' => Carbon::now()
-            ]);
-
         $antrian_sementara = AntrianSementara::where('keterangan', 'desain')->where('nomor_antrian', $nomor)->where('status', 2)->first();
         $antrian_sementara->status = 3;
+        $antrian_sementara->selesai = Carbon::now();
         $antrian_sementara->keterangan = "simpan";
         $antrian_sementara->save();
+
+        $pengunjung = new AntrianPengunjung;
+        $pengunjung->nomor_antrian = $nomor;
+        $pengunjung->nama_customer = $antrian_sementara->nama_customer;
+        $pengunjung->telepon = $antrian_sementara->telepon;
+        $pengunjung->customer_filter_id = $antrian_sementara->customer_filter_id;
+        $pengunjung->jabatan = "desain";
+        $pengunjung->mulai = $antrian_sementara->mulai;
+        $pengunjung->selesai = Carbon::now();
+        $pengunjung->master_karyawan_id = Auth::user()->master_karyawan_id;
+        $pengunjung->master_cabang_id = Auth::user()->karyawan->master_cabang_id;
+        $pengunjung->status = 3;
+        $pengunjung->tanggal = Carbon::now();
+        $pengunjung->save();
+
+        $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
+        $keterangan = "-";
+
+        event(new SitumpurDesainSelesai($antrian_user->nomor,$keterangan));
 
         return redirect()->route('situmpur_desain');
     }
 
     public function desainBatal($nomor)
     {
-        $pengunjung = AntrianPengunjung::where('nomor_antrian', $nomor)
-        ->where('jabatan', 'desain')
-        ->where('status', '0')
-        ->update([
-            'master_karyawan_id' => Auth::user()->master_karyawan_id,
-            'master_cabang_id' => Auth::user()->karyawan->cabang_id,
-            'status' => 4,
-            'tanggal' => Carbon::now()]);
-
         $antrian_sementara = AntrianSementara::where('keterangan', 'desain')->where('nomor_antrian', $nomor)->where('status', 1)->first();
-        $antrian_sementara->status = 3;
+        $antrian_sementara->status = 4;
         $antrian_sementara->keterangan = "simpan";
         $antrian_sementara->save();
+
+        $pengunjung = new AntrianPengunjung;
+        $pengunjung->nomor_antrian = $nomor;
+        $pengunjung->nama_customer = $antrian_sementara->nama_customer;
+        $pengunjung->telepon = $antrian_sementara->telepon;
+        $pengunjung->customer_filter_id = $antrian_sementara->customer_filter_id;
+        $pengunjung->jabatan = "desain";
+        $pengunjung->master_karyawan_id = Auth::user()->master_karyawan_id;
+        $pengunjung->master_cabang_id = Auth::user()->karyawan->master_cabang_id;
+        $pengunjung->status = 4;
+        $pengunjung->tanggal = Carbon::now();
+        $pengunjung->save();
 
         return redirect()->route('situmpur_desain');
     }
@@ -237,6 +301,20 @@ class SitumpurController extends Controller
     // display
     public function display()
     {
-        return view('pages.situmpur.display');
+        $antrian_user = AntrianUser::with(['karyawan' => function ($query) {
+            $query->where('master_cabang_id', 2);
+        }])
+        ->where('jabatan', 'desain')
+        ->get();
+
+        $antrian_terakhir = AntrianSementara::where('keterangan', 'desain')->where('status', 1)->orderBy('id', 'desc')->first();
+
+        $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
+
+        return view('pages.situmpur.display', [
+            'antrian_users' => $antrian_user,
+            'antrian_terakhir' => $antrian_terakhir,
+            'antrian_menunggu' => $antrian_menunggu
+        ]);
     }
 }
