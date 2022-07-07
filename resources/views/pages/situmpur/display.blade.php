@@ -218,7 +218,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="col-lg-4" style="height: 640px;">
             <div class="card" style="height: 640px;">
               <div class="card-header">
-                <h5 class="title">Nomor Antrian</h5>
+                <h5 class="title">Nomor Antrian Sekarang</h5>
               </div>
               <div class="card-body">
                     <p class="number" style="margin-top: 150px; font-size: 150px;"><span class="antrian_desain">{{ $antrian_terakhir->nomor_antrian }}</span></p>
@@ -236,8 +236,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="card-header header-desain-{{ $key + 1 }}">
                   <h5 class="title desain-{{ $key + 1 }}">Desain {{ $key + 1 }}</h5>
                 </div>
-                <div class="card-body">
-                  <p class="number-{{ $key + 1 }}">-</p>
+                <div class="card-body" style="height: 100px;">
+                    <p class="number-{{ $key + 1 }}">
+                        @foreach ($antrian_sementaras as $antrian_sementara)
+                            @if ($antrian_sementara->karyawan_id == $item->karyawan_id)
+                                {{ $antrian_sementara->nomor_antrian }}
+                            @endif
+                        @endforeach
+                    </p>
                 </div>
                 <div class="card-footer" style="height: 50px;">
                     <p>

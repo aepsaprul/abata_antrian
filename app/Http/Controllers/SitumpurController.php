@@ -308,13 +308,20 @@ class SitumpurController extends Controller
         ->get();
 
         $antrian_terakhir = AntrianSementara::where('keterangan', 'desain')->where('status', 1)->orderBy('id', 'desc')->first();
-
         $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
+        $antrian_sementara = AntrianSementara::where('keterangan', 'desain')
+            ->where('cabang_id', 2)
+            ->where('status', 1)
+            ->orWhere('status', 2)
+            ->get();
+
+            // dd($antrian_sementara);
 
         return view('pages.situmpur.display', [
             'antrian_users' => $antrian_user,
             'antrian_terakhir' => $antrian_terakhir,
-            'antrian_menunggu' => $antrian_menunggu
+            'antrian_menunggu' => $antrian_menunggu,
+            'antrian_sementaras' => $antrian_sementara
         ]);
     }
 }
