@@ -24,7 +24,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         // Enable pusher logging - don't include this in production
         // Pusher.logToConsole = true;
 
-        var pusher = new Pusher('07d3c75f0970790e45c6', {
+        // dev
+        // var pusher = new Pusher('07d3c75f0970790e45c6', {
+        //     cluster: 'ap1'
+        // });
+
+        // prod
+        var pusher = new Pusher('2f72f827ef95c4adf968', {
             cluster: 'ap1'
         });
 
