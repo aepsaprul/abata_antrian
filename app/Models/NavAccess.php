@@ -14,6 +14,6 @@ class NavAccess extends Model
     }
 
     public function navButton() {
-        return $this->belongsTo(navButton::class, 'nav_button_id', 'id');
+        return $this->belongsTo(NavButton::class, 'nav_button_id', 'id');
     }
 }

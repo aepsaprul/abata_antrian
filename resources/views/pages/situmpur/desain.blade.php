@@ -10,11 +10,15 @@
         <div class="container-fluid">
 			<h3 class="text-center">DESAINER {{ Auth::user()->name }}</h3>
 			<p style="text-align: center;">
-				@if ($antrian_user->status == "off")
-					<a href="{{ url('situmpur/page_desain/' . Auth::user()->master_karyawan_id . '/on') }}" class="btn btn-danger">Komputer OFF</a>
-				@else
-					<a href="{{ url('situmpur/page_desain/' . Auth::user()->master_karyawan_id . '/off') }}" class="btn btn-success">Komputer ON</a>
-				@endif
+                @if (Auth::user()->roles == "admin")
+                    <a href="#" class="btn btn-danger">Komputer OFF</a>
+                @else
+                    @if ($antrian_user->status == "off")
+                        <a href="{{ url('situmpur/page_desain/' . Auth::user()->master_karyawan_id . '/on') }}" class="btn btn-danger">Komputer OFF</a>
+                    @else
+                        <a href="{{ url('situmpur/page_desain/' . Auth::user()->master_karyawan_id . '/off') }}" class="btn btn-success">Komputer ON</a>
+                    @endif
+                @endif
 			</p>
 			<p style="text-align: center;">
 				<span class="stopwatch h3">00:00:00</span>
@@ -144,7 +148,11 @@
                                             '<span class="text-uppercase">' + value.nama_customer + '</span><br>' +
                                             '<span class="text-uppercase">' + title_filter + '</span>';
                                             if (value.status == 2) {
-												val_nomor_antrian += '<br><span class="text-uppercase text-danger">' + value.karyawan.nama_panggilan + '</span>';
+                                                if (value.karyawan == null) {
+                                                    val_nomor_antrian += '<br><span class="text-uppercase text-danger">admin</span>';
+                                                } else {
+                                                    val_nomor_antrian += '<br><span class="text-uppercase text-danger">' + value.karyawan.nama_panggilan + '</span>';
+                                                }
 											} else {
                                                 val_nomor_antrian += '<br><span class="text-uppercase text-danger">-</span>';
                                             }

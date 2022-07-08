@@ -18,7 +18,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = User::orderBy('id', 'desc')->get();
+        $user = User::where('master_karyawan_id', '!=', 0)->orderBy('id', 'desc')->get();
         $antrian_user = AntrianUser::get();
 
         $navigasi = NavAccess::with('navButton')
