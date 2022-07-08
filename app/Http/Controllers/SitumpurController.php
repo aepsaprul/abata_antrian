@@ -38,9 +38,9 @@ class SitumpurController extends Controller
                 'count_nomor_all' => $count_nomor_all
             ]);
         } else {
-            $nomors = AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('keterangan', 'desain')->orderBy('id', 'desc')->first();
-            $count_nomor_panggil = count(AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('keterangan', 'desain')->where('status','!=', '0')->get());
-            $count_nomor_all = count(AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('keterangan', 'desain')->get());
+            $nomors = AntrianSementara::where('cabang_id', 2)->orderBy('id', 'desc')->first();
+            $count_nomor_panggil = count(AntrianSementara::where('cabang_id', 2)->where('status','!=', '0')->get());
+            $count_nomor_all = count(AntrianSementara::where('cabang_id', 2)->get());
 
             return view('pages.situmpur.formDesain', [
                 'customer_filter_id' => $id,
@@ -71,69 +71,65 @@ class SitumpurController extends Controller
 
     public function customerStore(Request $request)
     {
-        if (Auth::user()->master_karyawan_id == 0) {
-            return redirect()->route('situmpur_customer')->with('error', 'Hanya karyawan cabang yg bisa akses');
-        } else {
-            $data_customer = count(MasterCustomer::where('telepon', $request->telepon)->get());
-            if ($data_customer == 0) {
-                $customers = new MasterCustomer;
-                $customers->nama_customer = $request->nama_customer;
-                $customers->telepon = $request->telepon;
-                $customers->master_cabang_id = Auth::user()->karyawan->masterCabang->id;
-                $customers->save();
-            }
-
-            $antrian_sementara = new AntrianSementara;
-
-            // if ($request->customer_filter_id == '3') {
-
-            //     event(new PbgAntrianCustomerCs($nomor_antrian,$nama,$telepon,$customer_filter_id));
-            //     event(new PbgAntrianCustomerDisplayCs($antrian_total));
-
-            //     $antrianNomors = new PbgAntrianCsNomor;
-
-            //     $antrianPengunjung = new AntrianPengunjung;
-            //     $antrianPengunjung->jabatan = "cs";
-
-            // } else {
-
-            //     event(new PbgAntrianCustomerDesain($nomor_antrian,$nama,$telepon,$customer_filter_id));
-            //     event(new PbgAntrianCustomerDisplayDesain($antrian_total));
-
-            //     $antrianNomors = new PbgAntrianDesainNomor;
-
-            //     $antrianPengunjung = new AntrianPengunjung;
-            //     $antrianPengunjung->jabatan = "desain";
-
-            // }
-
-            $antrian_sementara->nomor_antrian = $request->nomor_antrian;
-            $antrian_sementara->nama_customer = $request->nama_customer;
-            $antrian_sementara->telepon = $request->telepon;
-            $antrian_sementara->customer_filter_id = $request->customer_filter_id;
-            $antrian_sementara->cabang_id = Auth::user()->karyawan->master_cabang_id;
-            $antrian_sementara->keterangan = "desain";
-            $antrian_sementara->save();
-
-            $nomor_antrian = $request->nomor_antrian;
-            $nama = $request->nama_customer;
-            $telepon = $request->telepon;
-            $customer_filter_id = $request->customer_filter_id;
-            $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
-
-            event(new SitumpurCustomerDesain($nomor_antrian,$nama,$telepon,$customer_filter_id));
-            event(new SitumpurCustomerDisplay($antrian_menunggu));
-
-            // $antrianPengunjung->nomor_antrian = $request->nomor_antrian;
-            // $antrianPengunjung->nama_customer = $request->nama_customer;
-            // $antrianPengunjung->telepon = $request->telepon;
-            // $antrianPengunjung->customer_filter_id = $request->customer_filter_id;
-            // $antrianPengunjung->save();
-
-            // $url = "http://localhost/test/escpos/vendor/mike42/escpos-php/example/barcode.php?nomor_antrian=".$request->nomor_antrian."&sisa_antrian=".$request->sisa_antrian;
-            // return Redirect::to($url);
-            return redirect()->route('situmpur_customer');
+        $data_customer = count(MasterCustomer::where('telepon', $request->telepon)->get());
+        if ($data_customer == 0) {
+            $customers = new MasterCustomer;
+            $customers->nama_customer = $request->nama_customer;
+            $customers->telepon = $request->telepon;
+            $customers->master_cabang_id = 2;
+            $customers->save();
         }
+
+        $antrian_sementara = new AntrianSementara;
+
+        // if ($request->customer_filter_id == '3') {
+
+        //     event(new PbgAntrianCustomerCs($nomor_antrian,$nama,$telepon,$customer_filter_id));
+        //     event(new PbgAntrianCustomerDisplayCs($antrian_total));
+
+        //     $antrianNomors = new PbgAntrianCsNomor;
+
+        //     $antrianPengunjung = new AntrianPengunjung;
+        //     $antrianPengunjung->jabatan = "cs";
+
+        // } else {
+
+        //     event(new PbgAntrianCustomerDesain($nomor_antrian,$nama,$telepon,$customer_filter_id));
+        //     event(new PbgAntrianCustomerDisplayDesain($antrian_total));
+
+        //     $antrianNomors = new PbgAntrianDesainNomor;
+
+        //     $antrianPengunjung = new AntrianPengunjung;
+        //     $antrianPengunjung->jabatan = "desain";
+
+        // }
+
+        $antrian_sementara->nomor_antrian = $request->nomor_antrian;
+        $antrian_sementara->nama_customer = $request->nama_customer;
+        $antrian_sementara->telepon = $request->telepon;
+        $antrian_sementara->customer_filter_id = $request->customer_filter_id;
+        $antrian_sementara->cabang_id = 2;
+        $antrian_sementara->keterangan = "desain";
+        $antrian_sementara->save();
+
+        $nomor_antrian = $request->nomor_antrian;
+        $nama = $request->nama_customer;
+        $telepon = $request->telepon;
+        $customer_filter_id = $request->customer_filter_id;
+        $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
+
+        event(new SitumpurCustomerDesain($nomor_antrian,$nama,$telepon,$customer_filter_id));
+        event(new SitumpurCustomerDisplay($antrian_menunggu));
+
+        // $antrianPengunjung->nomor_antrian = $request->nomor_antrian;
+        // $antrianPengunjung->nama_customer = $request->nama_customer;
+        // $antrianPengunjung->telepon = $request->telepon;
+        // $antrianPengunjung->customer_filter_id = $request->customer_filter_id;
+        // $antrianPengunjung->save();
+
+        // $url = "http://localhost/test/escpos/vendor/mike42/escpos-php/example/barcode.php?nomor_antrian=".$request->nomor_antrian."&sisa_antrian=".$request->sisa_antrian;
+        // return Redirect::to($url);
+        return redirect()->route('situmpur_customer');
     }
 
     public function resetAntrian()
@@ -342,7 +338,7 @@ class SitumpurController extends Controller
         ->where('jabatan', 'desain')
         ->get();
 
-        $antrian_terakhir = AntrianSementara::where('keterangan', 'desain')->where('status', 1)->orderBy('id', 'desc')->first();
+        $antrian_terakhir = AntrianSementara::where('keterangan', 'simpan')->where('cabang_id', 2)->orderBy('id', 'desc')->first();
         $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
         $antrian_sementara = AntrianSementara::where('keterangan', 'desain')
             ->where('cabang_id', 2)

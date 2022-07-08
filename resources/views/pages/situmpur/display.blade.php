@@ -227,7 +227,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <h5 class="title">Nomor Antrian Sekarang</h5>
               </div>
               <div class="card-body">
-                    <p class="number" style="margin-top: 150px; font-size: 150px;"><span class="antrian_desain">{{ $antrian_terakhir->nomor_antrian }}</span></p>
+                    <p class="number" style="margin-top: 150px; font-size: 150px;">
+                        <span class="antrian_desain">
+                            @if ($antrian_terakhir)
+                                {{ $antrian_terakhir->nomor_antrian }}
+                            @endif
+                        </span>
+                    </p>
                 </div>
                 <div class="card-footer">
                     <h5 class="title">Menunggu <span class="antrian_total_desain text-danger">{{ $antrian_menunggu }}</span>  Antrian</h5>
