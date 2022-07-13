@@ -14,14 +14,17 @@ class CustomerController extends Controller
     public function index()
     {
         if (Auth::user()->master_karyawan_id != 0) {
-            $customer = MasterCustomer::where('master_cabang_id', Auth::user()->karyawan->master_cabang_id)
-                ->orderBy('id', 'desc')
-                ->limit(1000)
-                ->get();
+            if (Auth::user()->karyawan->master_cabang_id == 1) {
+                $customer = MasterCustomer::orderBy('id', 'desc')->limit(1000)->get();
+            } else {
+                $customer = MasterCustomer::where('master_cabang_id', Auth::user()->karyawan->master_cabang_id)
+                    ->orderBy('id', 'desc')
+                    ->limit(1000)
+                    ->get();
+            }
         } else {
             $customer = MasterCustomer::orderBy('id', 'desc')->limit(1000)->get();
         }
-
 
         $navigasi = NavAccess::with('navButton')
             ->whereHas('navButton.navSub', function ($query) {

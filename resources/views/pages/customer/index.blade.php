@@ -107,44 +107,9 @@
 </div>
 
 
-{{-- modal create --}}
-<div class="modal fade modal-create" id="modal-default">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="form-create">
-                <div class="modal-header">
-                    <h4 class="modal-title">Tambah Data Customer</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="create_nama" class="form-label">Nama Customer</label>
-                        <input type="text"
-                            class="form-control form-control-sm"
-                            id="create_nama"
-                            name="create_nama"
-                            maxlength="30"
-                            required>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button class="btn btn-primary btn-spinner-create" disabled style="width: 130px; display: none;">
-                        <span class="spinner-grow spinner-grow-sm"></span>
-                        Loading...
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-create-save" style="width: 130px;">
-                        <i class="fas fa-save"></i> Simpan
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
+{{-- modal edit --}}
 <div class="modal fade modal-edit" id="modal-default">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form id="form-edit">
                 <input type="hidden" id="edit_id" name="edit_id">
@@ -190,7 +155,7 @@
 
 {{-- modal delete --}}
 <div class="modal fade modal-delete" id="modal-default">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form id="form-delete">
                 <input type="hidden" id="delete_id" name="delete_id">

@@ -149,7 +149,7 @@ class SitumpurController extends Controller
 
     public function desainNomor()
     {
-        if (Auth::user()->roles == "admin") {
+        if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
             $nomors = AntrianSementara::with('karyawan')
                 ->where('keterangan', 'desain')
                 ->where('cabang_id', 2)
@@ -214,7 +214,7 @@ class SitumpurController extends Controller
         $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
         $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
 
-        if (Auth::user()->roles == "admin") {
+        if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
             event(new SitumpurDesainPanggil(1, $nomor, $antrian_menunggu));
         } else {
             event(new SitumpurDesainPanggil($antrian_user->nomor, $nomor, $antrian_menunggu));
@@ -280,7 +280,7 @@ class SitumpurController extends Controller
         $pengunjung->jabatan = "desain";
         $pengunjung->mulai = $antrian_sementara->mulai;
         $pengunjung->selesai = Carbon::now();
-        if (Auth::user()->roles == "admin") {
+        if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
             $pengunjung->master_karyawan_id = 0;
             $pengunjung->master_cabang_id = 2;
         } else {
@@ -293,7 +293,7 @@ class SitumpurController extends Controller
 
         $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
         $keterangan = "-";
-        if (Auth::user()->roles == "admin") {
+        if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
             event(new SitumpurDesainSelesai(1,$keterangan));
         } else {
             event(new SitumpurDesainSelesai($antrian_user->nomor,$keterangan));
@@ -315,7 +315,7 @@ class SitumpurController extends Controller
         $pengunjung->telepon = $antrian_sementara->telepon;
         $pengunjung->customer_filter_id = $antrian_sementara->customer_filter_id;
         $pengunjung->jabatan = "desain";
-        if (Auth::user()->roles == "admin") {
+        if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
             $pengunjung->master_karyawan_id = 0;
             $pengunjung->master_cabang_id = 2;
         } else {
