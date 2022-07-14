@@ -165,7 +165,19 @@
     <!-- AdminLTE App -->
     <script src="{{ asset('public/themes/dist/js/adminlte.js') }}"></script>
 
+    <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
+
     <script>
+        // dev
+        var pusher = new Pusher('07d3c75f0970790e45c6', {
+            cluster: 'ap1'
+        });
+
+        // prod
+        // var pusher = new Pusher('2f72f827ef95c4adf968', {
+        //     cluster: 'ap1'
+        // });
+
         function tanggalIndo(date) {
             var date = new Date(date);
             var tahun = date.getFullYear();

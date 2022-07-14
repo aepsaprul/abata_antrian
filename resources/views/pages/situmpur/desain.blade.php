@@ -46,14 +46,20 @@
 @endsection
 
 @section('script')
-<script src="https://js.pusher.com/7.1/pusher.min.js"></script>
+{{-- <script src="https://js.pusher.com/7.1/pusher.min.js"></script> --}}
 <script>
     // Enable pusher logging - don't include this in production
     // Pusher.logToConsole = true;
 
-    var pusher = new Pusher('07d3c75f0970790e45c6', {
-        cluster: 'ap1'
-    });
+    // dev
+    // var pusher = new Pusher('07d3c75f0970790e45c6', {
+    //     cluster: 'ap1'
+    // });
+
+    // prod
+    // var pusher = new Pusher('2f72f827ef95c4adf968', {
+    //     cluster: 'ap1'
+    // });
 
     var customer_desain = pusher.subscribe('customer-desain');
     customer_desain.bind('customer-desain-event', function(data) {

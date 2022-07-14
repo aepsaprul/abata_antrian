@@ -86,7 +86,7 @@
 
                 <div class="social-auth-links text-center mt-4 mb-3">
                     <img src="{{ asset('public/assets/logo-biru.png') }}" alt="logo-abata" style="max-width: 100px;">
-                    <span class="text-info text-uppercase font-weight-bold">Human Capital</span>
+                    <span class="text-info text-uppercase font-weight-bold">Antrian Situmpur</span>
                 </div>
                 <!-- /.social-auth-links -->
 

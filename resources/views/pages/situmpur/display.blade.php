@@ -25,14 +25,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         // Pusher.logToConsole = true;
 
         // dev
-        // var pusher = new Pusher('07d3c75f0970790e45c6', {
-        //     cluster: 'ap1'
-        // });
-
-        // prod
-        var pusher = new Pusher('2f72f827ef95c4adf968', {
+        var pusher = new Pusher('07d3c75f0970790e45c6', {
             cluster: 'ap1'
         });
+
+        // prod
+        // var pusher = new Pusher('2f72f827ef95c4adf968', {
+        //     cluster: 'ap1'
+        // });
 
         // customer ke total desain display
 		var customer_display = pusher.subscribe('customer-display');
@@ -40,7 +40,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 			$('.antrian_total_desain').empty();
 
-			var queryNomorAntrian = data.antrian_menunggu;
+			var queryNomorAntrian = data.total_antrian;
 
 			$('.antrian_total_desain').append(queryNomorAntrian);
 
@@ -85,7 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             $('.antrian_total_desain').empty();
 
-			var queryNomorAntrian = data.antrian_menunggu;
+			var queryNomorAntrian = data.total_antrian;
 
 			$('.antrian_total_desain').append(queryNomorAntrian);
         });
@@ -218,13 +218,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="row cs">
           <div class="col-lg-8">
             <div class="card">
-                <iframe width="100%" height="640px" src="https://www.youtube.com/embed/KFEI6xyhYpI?playlist=KFEI6xyhYpI&loop=1"></iframe>
+                <iframe width="100%" height="640px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
           </div>
           <div class="col-lg-4" style="height: 640px;">
             <div class="card" style="height: 640px;">
               <div class="card-header">
-                <h5 class="title">Nomor Antrian Sekarang</h5>
+                <h2 class="text-uppercase">Nomor Antrian Sekarang</h2>
               </div>
               <div class="card-body">
                     <p class="number" style="margin-top: 150px; font-size: 150px;">
@@ -234,7 +234,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </p>
                 </div>
                 <div class="card-footer">
-                    <h5 class="title">Menunggu <span class="antrian_total_desain text-danger">{{ $antrian_menunggu }}</span>  Antrian</h5>
+                    <h1 class="title">Total Antrian <span class="antrian_total_desain text-danger">{{ $total_antrian }}</span></h1>
                 </div>
             </div>
           </div>
@@ -246,7 +246,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="card-header header-desain-{{ $key + 1 }}">
                   <h5 class="title desain-{{ $key + 1 }}">Desain {{ $key + 1 }}</h5>
                 </div>
-                <div class="card-body" style="height: 100px;">
+                <div class="card-body" style="height: 150px;">
                     <p class="number-{{ $key + 1 }}">
                         @foreach ($antrian_sementaras as $antrian_sementara)
                             @if ($antrian_sementara->karyawan_id == $item->karyawan_id)

@@ -116,10 +116,10 @@ class SitumpurController extends Controller
         $nama = $request->nama_customer;
         $telepon = $request->telepon;
         $customer_filter_id = $request->customer_filter_id;
-        $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
+        $total_antrian = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
 
         event(new SitumpurCustomerDesain($nomor_antrian,$nama,$telepon,$customer_filter_id));
-        event(new SitumpurCustomerDisplay($antrian_menunggu));
+        event(new SitumpurCustomerDisplay($total_antrian));
 
         // $antrianPengunjung->nomor_antrian = $request->nomor_antrian;
         // $antrianPengunjung->nama_customer = $request->nama_customer;
@@ -212,12 +212,11 @@ class SitumpurController extends Controller
         $antrian_sementara->save();
 
         $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
-        $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
 
         if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
-            event(new SitumpurDesainPanggil(1, $nomor, $antrian_menunggu));
+            event(new SitumpurDesainPanggil(1, $nomor));
         } else {
-            event(new SitumpurDesainPanggil($antrian_user->nomor, $nomor, $antrian_menunggu));
+            event(new SitumpurDesainPanggil($antrian_user->nomor, $nomor));
         }
 
 
@@ -346,7 +345,14 @@ class SitumpurController extends Controller
         } else {
             $antrian_terakhir = 0;
         }
-        $antrian_menunggu = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
+        $data_total_antrian = AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->orderBy('id', 'desc')->first();
+        if ($data_total_antrian) {
+            $total_antrian_query = AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->orderBy('id', 'desc')->first();
+            $total_antrian = $total_antrian_query->nomor_antrian;
+        } else {
+            $total_antrian = 0;
+        }
+
         $antrian_sementara = AntrianSementara::where('keterangan', 'desain')
             ->where('cabang_id', 2)
             ->where('status', 1)
@@ -358,7 +364,7 @@ class SitumpurController extends Controller
         return view('pages.situmpur.display', [
             'antrian_users' => $antrian_user,
             'antrian_terakhir' => $antrian_terakhir,
-            'antrian_menunggu' => $antrian_menunggu,
+            'total_antrian' => $total_antrian,
             'antrian_sementaras' => $antrian_sementara
         ]);
     }

@@ -16,18 +16,15 @@ class SitumpurDesainPanggil implements ShouldBroadcast
 
     public $desain_nomor;
     public $antrian_nomor;
-    public $antrian_menunggu;
-
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($desain_nomor, $antrian_nomor, $antrian_menunggu)
+    public function __construct($desain_nomor, $antrian_nomor)
     {
         $this->desain_nomor = $desain_nomor;
         $this->antrian_nomor = $antrian_nomor;
-        $this->antrian_menunggu = $antrian_menunggu;
     }
 
     /**
