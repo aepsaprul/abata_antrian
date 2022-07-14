@@ -56,7 +56,6 @@
                                         <th class="text-center text-indigo">No</th>
                                         <th class="text-center text-indigo">Nama</th>
                                         <th class="text-center text-indigo">Jabatan</th>
-                                        <th class="text-center text-indigo">Cabang</th>
                                         <th class="text-center text-indigo">Email</th>
                                         <th class="text-center text-indigo">Aksi</th>
                                     </tr>
@@ -67,18 +66,9 @@
                                             <td class="text-center">{{ $key + 1 }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>
-                                                @if ($item->karyawan)
-                                                    @foreach ($antrian_users as $antrian_user)
-                                                        @if ($antrian_user->karyawan_id == $item->master_karyawan_id)
-                                                            <span class="text-capitalize">{{ $antrian_user->jabatan }} {{ $antrian_user->nomor }}</span>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($item->karyawan)
-                                                    {{ $item->karyawan->cabang->nama_cabang }}
-                                                @endif
+                                                @foreach ($item->antrianUser as $item_antrian_user)
+                                                    {{ $item_antrian_user->jabatan }} {{ $item_antrian_user->nomor }}
+                                                @endforeach
                                             </td>
                                             <td>{{ $item->email }}</td>
                                             <td class="text-center">
@@ -313,19 +303,19 @@
             $('#create_nama').empty();
 
             $.ajax({
-                url: "{{ URL::route('user.create') }}",
+                url: "https://abata-printing.com/api/api/karyawan",
                 type: "get",
                 success: function (response) {
-                    console.log(response);
+                    console.log(response.data);
 
                     let val_karyawan = '<option value="">--Pilih Karyawan--</option>';
-                    $.each(response.karyawans, function (index, item) {
-                        val_karyawan += '<option value="' + item.id + '">' + item.nama_lengkap;
-                            if (item.jabatan) {
-                                val_karyawan += ' - ' + item.jabatan.nama_jabatan;
+                    $.each(response.data, function (index, item) {
+                        val_karyawan += '<option value="' + item.id + '_' + item.nama_lengkap + '_' + item.email + '">' + item.nama_lengkap;
+                            if (item.master_jabatan) {
+                                val_karyawan += ' - ' + item.master_jabatan.nama_jabatan;
                             }
-                            if (item.cabang) {
-                                val_karyawan += ' - ' + item.cabang.nama_cabang;
+                            if (item.master_cabang) {
+                                val_karyawan += ' - ' + item.master_cabang.nama_cabang;
                             }
                         val_karyawan +='</option>';
                     })
@@ -385,7 +375,7 @@
                     var errorMessage = xhr.status + ': ' + error
 
                     Toast.fire({
-                        icon: 'danger',
+                        icon: 'error',
                         title: 'Error - ' + errorMessage
                     });
                 }

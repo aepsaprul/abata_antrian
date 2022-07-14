@@ -18,7 +18,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = User::where('master_karyawan_id', '!=', 0)->orderBy('id', 'desc')->get();
+        $user = User::with('antrianUser')->where('master_karyawan_id', '!=', 0)->orderBy('id', 'desc')->get();
         $antrian_user = AntrianUser::get();
 
         $navigasi = NavAccess::with('navButton')
@@ -51,23 +51,27 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $karyawan = Karyawan::find($request->nama);
+        $data_request = explode("_", $request->nama);
+        // $karyawan = Karyawan::find($request->nama);
+        $id = $data_request[0];
+        $name = $data_request[1];
+        $email = $data_request[2];
 
-        $user = User::where('email', $karyawan->email)->first();
+        $user = User::where('email', $email)->first();
 
         if ($user) {
             $status = "false";
             $keterangan = "Data Sudah Ada";
         } else {
             $user = new User;
-            $user->name = $karyawan->nama_lengkap;
-            $user->email = $karyawan->email;
+            $user->name = $name;
+            $user->email = $email;
             $user->password = Hash::make("abataprinting");
-            $user->master_karyawan_id = $karyawan->id;
+            $user->master_karyawan_id = $id;
             $user->save();
 
             $antrian_user = new AntrianUser;
-            $antrian_user->karyawan_id = $karyawan->id;
+            $antrian_user->karyawan_id = $id;
             $antrian_user->save();
 
             $status = "true";

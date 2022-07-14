@@ -45,4 +45,8 @@ class User extends Authenticatable
     public function karyawan() {
         return $this->belongsTo(Karyawan::class, 'master_karyawan_id', 'id');
     }
+
+    public function antrianUser() {
+        return $this->hasMany(AntrianUser::class, 'karyawan_id', 'master_karyawan_id');
+    }
 }
