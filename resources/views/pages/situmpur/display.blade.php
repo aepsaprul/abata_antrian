@@ -229,9 +229,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="card-body">
                     <p class="number" style="margin-top: 150px; font-size: 150px;">
                         <span class="antrian_desain">
-                            @if ($antrian_terakhir)
-                                {{ $antrian_terakhir->nomor_antrian }}
-                            @endif
+                            {{ $antrian_terakhir }}
                         </span>
                     </p>
                 </div>
