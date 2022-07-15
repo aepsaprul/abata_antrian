@@ -325,6 +325,14 @@ class SitumpurController extends Controller
         $pengunjung->tanggal = Carbon::now();
         $pengunjung->save();
 
+        $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
+        $keterangan = "-";
+        if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
+            event(new SitumpurDesainSelesai(1,$keterangan));
+        } else {
+            event(new SitumpurDesainSelesai($antrian_user->nomor,$keterangan));
+        }
+
         return redirect()->route('situmpur_desain');
     }
 
