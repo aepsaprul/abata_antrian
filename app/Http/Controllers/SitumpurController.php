@@ -134,7 +134,7 @@ class SitumpurController extends Controller
 
     public function resetAntrian()
     {
-        AntrianSementara::truncate();
+        AntrianSementara::where('cabang_id', 2)->delete();
 
         return redirect()->route('situmpur_customer');
     }
