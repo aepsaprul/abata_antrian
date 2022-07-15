@@ -116,7 +116,7 @@ class SitumpurController extends Controller
         $nama = $request->nama_customer;
         $telepon = $request->telepon;
         $customer_filter_id = $request->customer_filter_id;
-        $total_antrian = count(AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->where('status', 0)->get());
+        $total_antrian = count(AntrianSementara::where('cabang_id', 2)->get());
 
         event(new SitumpurCustomerDesain($nomor_antrian,$nama,$telepon,$customer_filter_id));
         event(new SitumpurCustomerDisplay($total_antrian));
@@ -345,9 +345,9 @@ class SitumpurController extends Controller
         } else {
             $antrian_terakhir = 0;
         }
-        $data_total_antrian = AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->orderBy('id', 'desc')->first();
+        $data_total_antrian = AntrianSementara::where('cabang_id', 2)->orderBy('id', 'desc')->first();
         if ($data_total_antrian) {
-            $total_antrian_query = AntrianSementara::where('keterangan', 'desain')->where('cabang_id', 2)->orderBy('id', 'desc')->first();
+            $total_antrian_query = AntrianSementara::where('cabang_id', 2)->orderBy('id', 'desc')->first();
             $total_antrian = $total_antrian_query->nomor_antrian;
         } else {
             $total_antrian = 0;
