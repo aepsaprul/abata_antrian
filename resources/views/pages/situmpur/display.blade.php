@@ -218,7 +218,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="row cs">
           <div class="col-lg-8">
             <div class="card">
-                <iframe width="100%" height="640px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe width="100%" height="640px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
           </div>
           <div class="col-lg-4" style="height: 640px;">
@@ -363,18 +363,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
             for (let index1 = 1; index1 <= 10; index1++) {
                 var merge_angka = index + index1;
                 if (angka == 30 || angka == 40 || angka == 50 || angka == 60 || angka == 70 || angka == 80 || angka == 90) {
-                    myVar = setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 5000);
+                    myVar = setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 4300);
                 } else if (merge_angka == angka && angka > 20) {
-                        myVar = setTimeout(function(){ document.getElementById("angka-" + index).play(); }, 5000);
-                        myVar = setTimeout(function(){ document.getElementById("angka-" + index1).play(); }, 6000);
+                        myVar = setTimeout(function(){ document.getElementById("angka-" + index).play(); }, 4300);
+                        myVar = setTimeout(function(){ document.getElementById("angka-" + index1).play(); }, 4300);
                 } else{
-                    myVar = setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 5000);
+                    myVar = setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 4300);
                 }
             }
         }
 
-        myVar = setTimeout(function(){ document.getElementById("kedesign").play(); }, 7000);
-        myVar = setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 9000);
+        myVar = setTimeout(function(){ document.getElementById("kedesign").play(); }, 5000);
+        myVar = setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 6100);
     }
     </script>
 </body>
