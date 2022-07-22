@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('dashboard/situmpur_pengunjung', [DashboardController::class, 'situmpurPengunjung'])->name('dashboard.situmpur_pengunjung');
 
     // master
         // navgasi
