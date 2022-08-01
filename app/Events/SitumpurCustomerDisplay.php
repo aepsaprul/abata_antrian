@@ -14,14 +14,16 @@ class SitumpurCustomerDisplay implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $cabang_id;
     public $total_antrian;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($total_antrian)
+    public function __construct($cabang_id, $total_antrian)
     {
+        $this->cabang_id = $cabang_id;
         $this->total_antrian = $total_antrian;
     }
 

@@ -57,6 +57,7 @@
                                         <th class="text-center text-indigo">Nama</th>
                                         <th class="text-center text-indigo">Jabatan</th>
                                         <th class="text-center text-indigo">Email</th>
+                                        <th class="text-center text-indigo">Cabang</th>
                                         <th class="text-center text-indigo">Aksi</th>
                                     </tr>
                                 </thead>
@@ -71,6 +72,11 @@
                                                 @endforeach
                                             </td>
                                             <td>{{ $item->email }}</td>
+                                            <td>
+                                                @if ($item->karyawan)
+                                                    {{ $item->karyawan->cabang->nama_cabang }}
+                                                @endif
+                                            </td>
                                             <td class="text-center">
                                                 <div class="btn-group">
                                                     @if (in_array("ubah", $data_navigasi) || in_array("hapus", $data_navigasi))

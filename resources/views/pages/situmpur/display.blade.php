@@ -21,6 +21,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
 
     <script>
+        let user = {!! Auth::user() !!};
+
         // Enable pusher logging - don't include this in production
         // Pusher.logToConsole = true;
 
@@ -37,114 +39,110 @@ scratch. This page gets rid of all links and provides the needed markup only.
         // customer ke total desain display
 		var customer_display = pusher.subscribe('customer-display');
 		customer_display.bind('customer-display-event', function(data) {
-
-			$('.antrian_total_desain').empty();
-
-			var queryNomorAntrian = data.total_antrian;
-
-			$('.antrian_total_desain').append(queryNomorAntrian);
-
+            if (user.karyawan.master_cabang_id == data.cabang_id) {
+                $('.antrian_total_desain').empty();
+                var queryNomorAntrian = data.total_antrian;
+                $('.antrian_total_desain').append(queryNomorAntrian);
+            }
 		});
 
         // desain ke display ketika klik panggil
         var desain_panggil = pusher.subscribe('desain-panggil');
         desain_panggil.bind('desain-panggil-event', function(data) {
-
-            $('.antrian_desain').empty();
-            var queryNomorAntrian = data.antrian_nomor;
-            $('.antrian_desain').append(queryNomorAntrian);
-
-            if (data.desain_nomor == 1) {
-                $('.desain .number-1').empty();
+            if (user.karyawan.master_cabang_id == data.cabang_id) {
+                $('.antrian_desain').empty();
                 var queryNomorAntrian = data.antrian_nomor;
-                $('.desain .number-1').append(queryNomorAntrian);
+                $('.antrian_desain').append(queryNomorAntrian);
 
-                antrianDesain(data.antrian_nomor, 1);
+                if (data.desain_nomor == 1) {
+                    $('.desain .number-1').empty();
+                    var queryNomorAntrian = data.antrian_nomor;
+                    $('.desain .number-1').append(queryNomorAntrian);
+
+                    antrianDesain(data.antrian_nomor, 1);
+                }
+                if (data.desain_nomor == 2) {
+                    $('.desain .number-2').empty();
+                    var queryNomorAntrian = data.antrian_nomor;
+                    $('.desain .number-2').append(queryNomorAntrian);
+
+                    antrianDesain(data.antrian_nomor, 2);
+                }
+                if (data.desain_nomor == 3) {
+                    $('.desain .number-3').empty();
+                    var queryNomorAntrian = data.antrian_nomor;
+                    $('.desain .number-3').append(queryNomorAntrian);
+
+                    antrianDesain(data.antrian_nomor, 3);
+                }
+                if (data.desain_nomor == 4) {
+                    $('.desain .number-4').empty();
+                    var queryNomorAntrian = data.antrian_nomor;
+                    $('.desain .number-4').append(queryNomorAntrian);
+
+                    antrianDesain(data.antrian_nomor, 4);
+                }
             }
-            if (data.desain_nomor == 2) {
-                $('.desain .number-2').empty();
-                var queryNomorAntrian = data.antrian_nomor;
-                $('.desain .number-2').append(queryNomorAntrian);
-
-                antrianDesain(data.antrian_nomor, 2);
-            }
-            if (data.desain_nomor == 3) {
-                $('.desain .number-3').empty();
-                var queryNomorAntrian = data.antrian_nomor;
-                $('.desain .number-3').append(queryNomorAntrian);
-
-                antrianDesain(data.antrian_nomor, 3);
-            }
-            if (data.desain_nomor == 4) {
-                $('.desain .number-4').empty();
-                var queryNomorAntrian = data.antrian_nomor;
-                $('.desain .number-4').append(queryNomorAntrian);
-
-                antrianDesain(data.antrian_nomor, 4);
-            }
-
-            $('.antrian_total_desain').empty();
-
-			var queryNomorAntrian = data.total_antrian;
-
-			$('.antrian_total_desain').append(queryNomorAntrian);
         });
 
         // update ketika desainer klik selesai
         var desain_selesai = pusher.subscribe('desain-selesai');
         desain_selesai.bind('desain-selesai-event', function(data) {
-            if (data.desain_nomor == 1) {
-                $('.desain .number-1').empty();
-                var keterangan = data.keterangan;
-                $('.desain .number-1').append(keterangan);
-            }
-            if (data.desain_nomor == 2) {
-                $('.desain .number-2').empty();
-                var keterangan = data.keterangan;
-                $('.desain .number-2').append(keterangan);
-            }
-            if (data.desain_nomor == 3) {
-                $('.desain .number-3').empty();
-                var keterangan = data.keterangan;
-                $('.desain .number-3').append(keterangan);
-            }
-            if (data.desain_nomor == 4) {
-                $('.desain .number-4').empty();
-                var keterangan = data.keterangan;
-                $('.desain .number-4').append(keterangan);
+            if (user.karyawan.master_cabang_id == data.cabang_id) {
+                if (data.desain_nomor == 1) {
+                    $('.desain .number-1').empty();
+                    var keterangan = data.keterangan;
+                    $('.desain .number-1').append(keterangan);
+                }
+                if (data.desain_nomor == 2) {
+                    $('.desain .number-2').empty();
+                    var keterangan = data.keterangan;
+                    $('.desain .number-2').append(keterangan);
+                }
+                if (data.desain_nomor == 3) {
+                    $('.desain .number-3').empty();
+                    var keterangan = data.keterangan;
+                    $('.desain .number-3').append(keterangan);
+                }
+                if (data.desain_nomor == 4) {
+                    $('.desain .number-4').empty();
+                    var keterangan = data.keterangan;
+                    $('.desain .number-4').append(keterangan);
+                }
             }
         });
 
         // desain on / off
         var desain_status = pusher.subscribe('desain-status');
         desain_status.bind('desain-status-event', function(data) {
-
-            if (data.desain_nomor == 1) {
-                if (data.status == "on") {
-                    $(".desain .desain-1 .card-footer p").append(data.nama_desain);
-                } else {
-                    $(".desain .desain-1 .card-footer p").empty();
+            if (user.karyawan.master_cabang_id == data.cabang_id) {
+                if (data.desain_nomor == 1) {
+                    if (data.status == "on") {
+                        $(".desain .desain-1 .card-footer p").append(data.nama_desain);
+                    } else {
+                        $(".desain .desain-1 .card-footer p").empty();
+                    }
                 }
-            }
-            if (data.desain_nomor == 2) {
-                if (data.status == "on") {
-                    $(".desain .desain-2 .card-footer p").append(data.nama_desain);
-                } else {
-                    $(".desain .desain-2 .card-footer p").empty();
+                if (data.desain_nomor == 2) {
+                    if (data.status == "on") {
+                        $(".desain .desain-2 .card-footer p").append(data.nama_desain);
+                    } else {
+                        $(".desain .desain-2 .card-footer p").empty();
+                    }
                 }
-            }
-            if (data.desain_nomor == 3) {
-                if (data.status == "on") {
-                    $(".desain .desain-3 .card-footer p").append(data.nama_desain);
-                } else {
-                    $(".desain .desain-3 .card-footer p").empty();
+                if (data.desain_nomor == 3) {
+                    if (data.status == "on") {
+                        $(".desain .desain-3 .card-footer p").append(data.nama_desain);
+                    } else {
+                        $(".desain .desain-3 .card-footer p").empty();
+                    }
                 }
-            }
-            if (data.desain_nomor == 4) {
-                if (data.status == "on") {
-                    $(".desain .desain-4 .card-footer p").append(data.nama_desain);
-                } else {
-                    $(".desain .desain-4 .card-footer p").empty();
+                if (data.desain_nomor == 4) {
+                    if (data.status == "on") {
+                        $(".desain .desain-4 .card-footer p").append(data.nama_desain);
+                    } else {
+                        $(".desain .desain-4 .card-footer p").empty();
+                    }
                 }
             }
         });
@@ -240,31 +238,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div>
         </div>
         <div class="row desain">
-          @foreach ($antrian_users as $key => $item)
-            <div class="col-lg-3 desain-{{ $key + 1 }}">
-              <div class="card">
-                <div class="card-header header-desain-{{ $key + 1 }}">
-                  <h5 class="title desain-{{ $key + 1 }}">Desain {{ $key + 1 }}</h5>
-                </div>
-                <div class="card-body" style="height: 150px;">
-                    <p class="number-{{ $key + 1 }}">
-                        @foreach ($antrian_sementaras as $antrian_sementara)
-                            @if ($antrian_sementara->karyawan_id == $item->karyawan_id)
-                                {{ $antrian_sementara->nomor_antrian }}
-                            @endif
-                        @endforeach
-                    </p>
-                </div>
-                <div class="card-footer" style="height: 50px;">
-                    <p>
-                        @if ($item->status == "on")
-                            {{ $item->karyawan->nama_panggilan }}
-                        @endif
-                    </p>
-                </div>
-              </div>
-            </div>
-          @endforeach
+            @if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1)
+                @php
+                    $cabang_id = 1;
+                @endphp
+            @else
+                @php
+                    $cabang_id = Auth::user()->karyawan->master_cabang_id;
+                @endphp
+            @endif
+            @foreach ($antrian_users as $key => $item)
+                @if ($item->karyawan)
+                    @if ($item->karyawan->master_cabang_id == $cabang_id)
+                        <div class="col-lg-3 desain-{{ $item->nomor }}">
+                            <div class="card">
+                                <div class="card-header header-desain-{{ $item->nomor }}">
+                                <h5 class="title desain-{{ $item->nomor }}">Desain {{ $item->nomor }}</h5>
+                                </div>
+                                <div class="card-body" style="height: 150px;">
+                                    <p class="number-{{ $item->nomor }}">
+                                        @foreach ($antrian_sementaras as $antrian_sementara)
+                                            @if ($antrian_sementara->karyawan_id == $item->karyawan_id)
+                                                {{ $antrian_sementara->nomor_antrian }}
+                                            @endif
+                                        @endforeach
+                                    </p>
+                                </div>
+                                <div class="card-footer" style="height: 50px;">
+                                    <p>
+                                        @if ($item->status == "on")
+                                            {{ $item->karyawan->nama_panggilan }}
+                                        @endif
+                                        {{-- @if ($item->karyawan) --}}
+                                            {{-- @if ($item->status == "on")
+                                                {{ $item->karyawan->nama_panggilan }}
+                                            @endif --}}
+                                            {{-- {{$item->karyawan->master_cabang_id}}
+                                        @endif --}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endif
+            @endforeach
 					{{-- <div class="col-lg-3 desain-1">
 						<div class="card">
 							<div class="card-header header-desain-satu">

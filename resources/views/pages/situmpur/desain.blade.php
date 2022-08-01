@@ -48,13 +48,16 @@
 @section('script')
 {{-- <script src="https://js.pusher.com/7.1/pusher.min.js"></script> --}}
 <script>
+    let user_cabang_id = {!! Auth::user()->karyawan->master_cabang_id !!};
+    console.log(user_cabang_id);
+
     // Enable pusher logging - don't include this in production
     // Pusher.logToConsole = true;
 
     // dev
-    // var pusher = new Pusher('07d3c75f0970790e45c6', {
-    //     cluster: 'ap1'
-    // });
+    var pusher = new Pusher('07d3c75f0970790e45c6', {
+        cluster: 'ap1'
+    });
 
     // prod
     // var pusher = new Pusher('2f72f827ef95c4adf968', {
@@ -63,41 +66,43 @@
 
     var customer_desain = pusher.subscribe('customer-desain');
     customer_desain.bind('customer-desain-event', function(data) {
-        if (data.customer_filter_id == 1) {
-            var title_filter = "File Siap";
-        } else {
-            var title_filter = "Desain / Edit";
-        }
-        var queryNomorAntrian = "" +
-            '<div class="col-3">' +
-                '<div class="card">' +
-                    '<div class="card-header">' +
-                        '<h6 class="text-uppercase text-center">antrian</h6>' +
+        if (user_cabang_id == data.cabang_id) {
+            if (data.customer_filter_id == 1) {
+                var title_filter = "File Siap";
+            } else {
+                var title_filter = "Desain / Edit";
+            }
+            var queryNomorAntrian = "" +
+                '<div class="col-3">' +
+                    '<div class="card">' +
+                        '<div class="card-header">' +
+                            '<h6 class="text-uppercase text-center">antrian</h6>' +
+                        '</div>' +
+                        '<div class="card-body text-center">' +
+                            '<span class="text-uppercase font-weight-bold" style="font-size: 50px;">' + data.nomor_antrian + '</span><br>' +
+                            '<span class="text-uppercase">' + data.nama + '</span><br>' +
+                            '<span class="text-uppercase">' + title_filter + '</span>' +
+                            '<br><span class="text-uppercase text-danger">-</span>' +
+                        '</div>' +
+                        '<div class="card-footer">' +
+                            '<div class="d-flex justify-content-center">' +
+                                '<a href="page_desain/' + data.nomor_antrian + '/panggil" class="btn btn-primary" style="width: 50px;" title="Panggil"><i class="fas fa-phone"></i></a>' +
+                            '</div>'
+                        '</div>' +
                     '</div>' +
-                    '<div class="card-body text-center">' +
-                        '<span class="text-uppercase font-weight-bold" style="font-size: 50px;">' + data.nomor_antrian + '</span><br>' +
-                        '<span class="text-uppercase">' + data.nama + '</span><br>' +
-                        '<span class="text-uppercase">' + title_filter + '</span>' +
-                        '<br><span class="text-uppercase text-danger">-</span>' +
-                    '</div>' +
-                    '<div class="card-footer">' +
-                        '<div class="d-flex justify-content-center">' +
-                            '<a href="page_desain/' + data.nomor_antrian + '/panggil" class="btn btn-primary" style="width: 50px;" title="Panggil"><i class="fas fa-phone"></i></a>' +
-                        '</div>'
-                    '</div>' +
-                '</div>' +
-            '</div>';
+                '</div>';
 
-        $('.data-nomor').append(queryNomorAntrian);
+            $('.data-nomor').append(queryNomorAntrian);
 
-        if (Notification.permission === "granted") {
-            showNotification();
-        } else if (Notification.permission !== "denied") {
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    showNotification();
-                }
-            });
+            if (Notification.permission === "granted") {
+                showNotification();
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        showNotification();
+                    }
+                });
+            }
         }
 
         function showNotification() {

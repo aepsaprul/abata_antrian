@@ -14,6 +14,7 @@ class SitumpurDesainStatus implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $cabang_id;
     public $desain_nomor;
     public $status;
     public $nama_desain;
@@ -22,8 +23,9 @@ class SitumpurDesainStatus implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($desain_nomor,$status,$nama_desain)
+    public function __construct($cabang_id, $desain_nomor, $status, $nama_desain)
     {
+        $this->cabang_id = $cabang_id;
         $this->desain_nomor = $desain_nomor;
         $this->status = $status;
         $this->nama_desain = $nama_desain;

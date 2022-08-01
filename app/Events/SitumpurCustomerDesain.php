@@ -13,6 +13,7 @@ use Illuminate\Queue\SerializesModels;
 class SitumpurCustomerDesain implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+    public $cabang_id;
     public $nomor_antrian;
     public $nama;
     public $telepon;
@@ -22,8 +23,9 @@ class SitumpurCustomerDesain implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($nomor_antrian,$nama,$telepon,$customer_filter_id)
+    public function __construct($cabang_id, $nomor_antrian,$nama,$telepon,$customer_filter_id)
     {
+        $this->cabang_id = $cabang_id;
         $this->nomor_antrian = $nomor_antrian;
         $this->nama = $nama;
         $this->telepon = $telepon;

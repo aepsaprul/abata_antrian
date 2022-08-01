@@ -39,8 +39,6 @@
                 <a href="#" class="h2 text-uppercase"><strong>Login</strong></a>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in untuk memulai Aplikasi</p>
-
                 <form action="{{ route('login') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
@@ -86,7 +84,7 @@
 
                 <div class="social-auth-links text-center mt-4 mb-3">
                     <img src="{{ asset('public/assets/logo-biru.png') }}" alt="logo-abata" style="max-width: 100px;">
-                    <span class="text-info text-uppercase font-weight-bold">Antrian Situmpur</span>
+                    <span class="text-info text-uppercase font-weight-bold">Antrian</span>
                 </div>
                 <!-- /.social-auth-links -->
 
@@ -99,7 +97,7 @@
                     @endif
                 </div>
                 <hr>
-                <div class="text-center mb-2 text-secondary" style="font-size: 14px;">©2022 All Rights Reserved - AdminLTE</div>
+                <div class="text-center mb-2 text-secondary text-danger" style="font-size: 14px;">*kendala aplikasi bisa laporkan ke bagian IT</div>
             </div>
             <!-- /.card-body -->
         </div>
