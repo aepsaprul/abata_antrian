@@ -4,20 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\AntrianPengunjung;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
+            $cabang_id = 1;
+        } else {
+            $cabang_id = Auth::user()->karyawan->master_cabang_id;
+        }
+
         $customer = AntrianPengunjung::select(DB::raw('nama_customer, telepon'), DB::raw('MAX(tanggal) AS tanggal_terakhir_pengunjung'), DB::raw('count(*) AS total'))
-            ->where('master_cabang_id', 2)
+            ->where('master_cabang_id', $cabang_id)
             ->groupBy('nama_customer', 'telepon')
             ->orderBy('total', 'desc')
             ->limit(10)
             ->get();
 
-        return view('pages.dashboard.index', ['customer' => $customer]);
+        $customer_terakhir = AntrianPengunjung::where('master_cabang_id', $cabang_id)
+            ->orderBy('id', 'desc')
+            ->limit(100)
+            ->get();
+
+        return view('pages.dashboard.index', ['customer' => $customer, 'customer_terakhir' => $customer_terakhir]);
     }
 
     public function situmpurPengunjung()

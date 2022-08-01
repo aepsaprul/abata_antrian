@@ -15,8 +15,8 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <!-- pengunjung bulan ini -->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <!-- pengunjung terbanyak -->
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                     <div class="card card-info mt-4">
                         <div class="card-header">
                             <h6>Data Pengunjung Terbanyak</h6>
@@ -38,6 +38,35 @@
                                             <td>{{ $item->nama_customer }}</td>
                                             <td class="text-center">{{ $item->telepon }}</td>
                                             <td class="text-center">{{ $item->total }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 100 pengunjung terakhir -->
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="card card-info mt-4">
+                        <div class="card-header">
+                            <h6>Data Pengunjung Terakhir</h6>
+                        </div>
+                        <div class="card-body">
+                            <table id="tabel_customer_terakhir" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center text-indigo">No</th>
+                                        <th class="text-center text-indigo">Nama</th>
+                                        <th class="text-center text-indigo">Telepon</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($customer_terakhir as $key => $item)
+                                        <tr>
+                                            <td class="text-center">{{ $key + 1 }}</td>
+                                            <td>{{ $item->nama_customer }}</td>
+                                            <td class="text-center">{{ $item->telepon }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -98,6 +127,9 @@
 <script>
     $(document).ready(function () {
         $("#tabel_customer").DataTable({
+            'ordering': false
+        });
+        $("#tabel_customer_terakhir").DataTable({
             'ordering': false
         });
 
