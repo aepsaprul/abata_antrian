@@ -13,7 +13,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="d-flex justify-content-center">
-                <div class="col-4">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                     <div class="mt-5">
                         <center>
                             <img src="{{ asset('public/assets/logo-bg-blue.png') }}" alt="">
