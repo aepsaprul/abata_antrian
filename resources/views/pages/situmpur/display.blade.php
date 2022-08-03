@@ -216,11 +216,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="row cs">
           <div class="col-lg-8">
             <div class="card">
-                <iframe width="100%" height="640px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe width="100%" height="770px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
           </div>
-          <div class="col-lg-4" style="height: 640px;">
-            <div class="card" style="height: 640px;">
+          <div class="col-lg-4" style="height: 770px;">
+            <div class="card" style="height: 770px;">
               <div class="card-header">
                 <h2 class="text-uppercase">Nomor Antrian Sekarang</h2>
               </div>
@@ -237,7 +237,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
           </div>
         </div>
-        <div class="row desain">
+        <div class="d-flex justify-content-center desain">
             @if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1)
                 @php
                     $cabang_id = 1;
