@@ -59,6 +59,7 @@
                                         <th class="text-center text-indigo">No</th>
                                         <th class="text-center text-indigo">Nama</th>
                                         <th class="text-center text-indigo">Telepon</th>
+                                        <th class="text-center text-indigo">Tanggal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,6 +68,7 @@
                                             <td class="text-center">{{ $key + 1 }}</td>
                                             <td>{{ $item->nama_customer }}</td>
                                             <td class="text-center">{{ $item->telepon }}</td>
+                                            <td class="text-center">{{ $item->updated_at->format('d-m-y H:i') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
