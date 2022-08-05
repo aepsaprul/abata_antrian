@@ -34,10 +34,17 @@ class DashboardController extends Controller
 
     public function situmpurPengunjung()
     {
+        if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
+            $cabang_id = 1;
+        } else {
+            $cabang_id = Auth::user()->karyawan->master_cabang_id;
+        }
+
         // data pengunjung bulan ini--------------------------------------------------------------------
         $bulan_sekarang = date("Y-m");
 
         $pengunjung = AntrianPengunjung::select(DB::raw('count(*) AS total_pengunjung'), DB::raw('DAY(tanggal) AS tanggal_pengunjung'))
+            ->where('master_cabang_id', $cabang_id)
             ->where('tanggal', 'like', '%'.$bulan_sekarang.'%')
             ->groupBy('tanggal_pengunjung')
             ->get();
@@ -51,6 +58,7 @@ class DashboardController extends Controller
 
         // data customer yang sering datang berdasarkan shift--------------------------------------------------------------
         $customer_shift_1 = AntrianPengunjung::select(DB::raw('COUNT(HOUR(tanggal)) AS total_pengunjung', 'tanggal'), DB::raw('DAY(tanggal) as tanggal_pengunjung'))
+            ->where('master_cabang_id', $cabang_id)
             ->whereBetween(DB::raw('HOUR(tanggal)'), [8,14])
             ->where('tanggal', 'like', '%'.$bulan_sekarang.'%')
             ->groupBy('tanggal_pengunjung')
@@ -64,6 +72,7 @@ class DashboardController extends Controller
         }
 
         $customer_shift_2 = AntrianPengunjung::select(DB::raw('COUNT(HOUR(tanggal)) AS total_pengunjung', 'tanggal'), DB::raw('DAY(tanggal) as tanggal_pengunjung'))
+            ->where('master_cabang_id', $cabang_id)
             ->whereBetween(DB::raw('HOUR(tanggal)'), [15,21])
             ->where('tanggal', 'like', '%'.$bulan_sekarang.'%')
             ->groupBy('tanggal_pengunjung')
