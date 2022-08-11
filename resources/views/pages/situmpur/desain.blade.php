@@ -21,7 +21,7 @@
                 @endif
 			</p>
 			<p style="text-align: center;">
-				<span class="stopwatch h3">00:00:00</span>
+				{{-- <span class="stopwatch h3">00:00:00</span> --}}
 			</p>
 			<hr>
 			<div class="row">
@@ -49,7 +49,7 @@
 {{-- <script src="https://js.pusher.com/7.1/pusher.min.js"></script> --}}
 <script>
     let user_cabang_id = {!! Auth::user()->karyawan->master_cabang_id !!};
-    console.log(user_cabang_id);
+    let user_karyawan_id = {!! Auth::user()->master_karyawan_id !!};
 
     // Enable pusher logging - don't include this in production
     // Pusher.logToConsole = true;
@@ -67,32 +67,6 @@
     var customer_desain = pusher.subscribe('customer-desain');
     customer_desain.bind('customer-desain-event', function(data) {
         if (user_cabang_id == data.cabang_id) {
-            if (data.customer_filter_id == 1) {
-                var title_filter = "File Siap";
-            } else {
-                var title_filter = "Desain / Edit";
-            }
-            var queryNomorAntrian = "" +
-                '<div class="col-3">' +
-                    '<div class="card">' +
-                        '<div class="card-header">' +
-                            '<h6 class="text-uppercase text-center">antrian</h6>' +
-                        '</div>' +
-                        '<div class="card-body text-center">' +
-                            '<span class="text-uppercase font-weight-bold" style="font-size: 50px;">' + data.nomor_antrian + '</span><br>' +
-                            '<span class="text-uppercase">' + data.nama + '</span><br>' +
-                            '<span class="text-uppercase">' + title_filter + '</span>' +
-                            '<br><span class="text-uppercase text-danger">-</span>' +
-                        '</div>' +
-                        '<div class="card-footer">' +
-                            '<div class="d-flex justify-content-center">' +
-                                '<a href="page_desain/' + data.nomor_antrian + '/panggil" class="btn btn-primary" style="width: 50px;" title="Panggil"><i class="fas fa-phone"></i></a>' +
-                            '</div>'
-                        '</div>' +
-                    '</div>' +
-                '</div>';
-
-            $('.data-nomor').append(queryNomorAntrian);
 
             if (Notification.permission === "granted") {
                 showNotification();
@@ -103,6 +77,8 @@
                     }
                 });
             }
+
+            window.location.reload(1);
         }
 
         function showNotification() {
@@ -115,7 +91,20 @@
             }
         }
 
-        console.log(Notification.permission);
+    });
+
+    // desain ke display ketika klik panggil
+    var desain_panggil = pusher.subscribe('desain-panggil');
+    desain_panggil.bind('desain-panggil-event', function(data) {
+        window.location.reload(1);
+    });
+
+    // update ketika desainer klik selesai
+    var desain_selesai = pusher.subscribe('desain-selesai');
+    desain_selesai.bind('desain-selesai-event', function(data) {
+        if (user_cabang_id == data.cabang_id) {
+            window.location.reload(1);
+        }
     });
 
 </script>
@@ -158,11 +147,11 @@
                                             '<span class="text-uppercase font-weight-bold" style="font-size: 50px;">' + value.nomor_antrian + '</span><br>' +
                                             '<span class="text-uppercase">' + value.nama_customer + '</span><br>' +
                                             '<span class="text-uppercase">' + title_filter + '</span>';
-                                            if (value.status == 2) {
+                                            if (value.status == 1 || value.status == 2) {
                                                 if (value.karyawan == null) {
                                                     val_nomor_antrian += '<br><span class="text-uppercase text-danger">admin</span>';
                                                 } else {
-                                                    val_nomor_antrian += '<br><span class="text-uppercase text-danger">' + value.karyawan.nama_panggilan + '</span>';
+                                                    val_nomor_antrian += '<br><span class="text-uppercase text-danger font-weight-bold">' + value.karyawan.nama_panggilan + '</span>';
                                                 }
 											} else {
                                                 val_nomor_antrian += '<br><span class="text-uppercase text-danger">-</span>';
@@ -177,25 +166,30 @@
                                             }
                                             if (value.status == 1) {
                                                 if (value.customer_filter_id == 2) {
-                                                    val_nomor_antrian += '' +
-                                                        '<div class="d-flex justify-content-center">' +
-                                                            '<a href="page_desain/' + value.nomor_antrian + '/panggil" class="btn btn-primary" style="width: 50px;" title="Panggil"><i class="fas fa-phone"></i></a>' +
-                                                        '</div>';
+                                                    if (user_karyawan_id == value.karyawan.id) {
+                                                        val_nomor_antrian += '' +
+                                                            '<div class="d-flex justify-content-center">' +
+                                                                '<a href="page_desain/' + value.nomor_antrian + '/panggil" class="btn btn-primary" style="width: 50px;" title="Panggil"><i class="fas fa-phone"></i></a>' +
+                                                            '</div>';
+                                                    }
                                                 } else {
-                                                    val_nomor_antrian += '' +
-                                                        '<div class="d-flex justify-content-between">' +
-                                                            '<a href="page_desain/' + value.nomor_antrian + '/panggil" class="btn btn-primary" style="width: 50px;" title="Panggil"><i class="fas fa-phone"></i></a>' +
-                                                            '<a href="page_desain/' + value.nomor_antrian + '/mulai" class="btn btn-success" style="width: 50px;" title="Mulai"><i class="fas fa-play"></i></a>' +
-                                                            '<a href="page_desain/' + value.nomor_antrian + '/batal" class="btn btn-danger" style="width: 50px;" title="Batal"><i class="fas fa-times"></i></a>' +
-                                                        '</div>';
+                                                    if (user_karyawan_id == value.karyawan.id) {
+                                                        val_nomor_antrian += '' +
+                                                            '<div class="d-flex justify-content-between">' +
+                                                                '<a href="page_desain/' + value.nomor_antrian + '/panggil" class="btn btn-primary" style="width: 50px;" title="Panggil"><i class="fas fa-phone"></i></a>' +
+                                                                '<a href="page_desain/' + value.nomor_antrian + '/mulai" class="btn btn-success" style="width: 50px;" title="Mulai"><i class="fas fa-play"></i></a>' +
+                                                                '<a href="page_desain/' + value.nomor_antrian + '/batal" class="btn btn-danger" style="width: 50px;" title="Batal"><i class="fas fa-times"></i></a>' +
+                                                            '</div>';
+                                                    }
                                                 }
                                             }
                                             if (value.status == 2) {
-                                                start();
-                                                val_nomor_antrian += '' +
-                                                    '<div class="d-flex justify-content-center">' +
-                                                        '<a href="page_desain/' + value.nomor_antrian + '/selesai" class="btn btn-success" style="width: 50px;" title="Selesai"><i class="fas fa-check"></i></a>' +
-                                                    '</div>';
+                                                if (user_karyawan_id == value.karyawan.id) {
+                                                    val_nomor_antrian += '' +
+                                                        '<div class="d-flex justify-content-center">' +
+                                                            '<a href="page_desain/' + value.nomor_antrian + '/selesai" class="btn btn-success" style="width: 50px;" title="Selesai"><i class="fas fa-check"></i></a>' +
+                                                        '</div>';
+                                                }
                                             }
                                             val_nomor_antrian += '' +
                                         '</div>' +
