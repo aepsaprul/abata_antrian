@@ -204,15 +204,18 @@ class SitumpurController extends Controller
 
     public function desainPanggil($nomor)
     {
-        $antrian_sementara = AntrianSementara::where('keterangan', 'desain')->where('nomor_antrian', $nomor)->first();
-        $antrian_sementara->status = 1;
         if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
-            $antrian_sementara->karyawan_id = 0;
-            $antrian_sementara->cabang_id = 1;
+            $karyawan_id = 0;
+            $cabang_id = 1;
         } else {
-            $antrian_sementara->karyawan_id = Auth::user()->master_karyawan_id;
-            $antrian_sementara->cabang_id = Auth::user()->karyawan->master_cabang_id;
+            $karyawan_id = Auth::user()->master_karyawan_id;
+            $cabang_id = Auth::user()->karyawan->master_cabang_id;
         }
+
+        $antrian_sementara = AntrianSementara::where('cabang_id', $cabang_id)->where('keterangan', 'desain')->where('nomor_antrian', $nomor)->first();
+        $antrian_sementara->status = 1;
+        $antrian_sementara->karyawan_id = $karyawan_id;
+        $antrian_sementara->cabang_id = $cabang_id;
         $antrian_sementara->save();
 
         $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
