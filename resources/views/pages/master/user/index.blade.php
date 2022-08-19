@@ -309,13 +309,13 @@
             $('#create_nama').empty();
 
             $.ajax({
-                url: "https://abata-printing.com/api/api/karyawan",
+                url: "{{ URL::route('user.create') }}",
                 type: "get",
                 success: function (response) {
-                    console.log(response.data);
+                    console.log(response.karyawans);
 
                     let val_karyawan = '<option value="">--Pilih Karyawan--</option>';
-                    $.each(response.data, function (index, item) {
+                    $.each(response.karyawans, function (index, item) {
                         val_karyawan += '<option value="' + item.id + '_' + item.nama_lengkap + '_' + item.email + '">' + item.nama_lengkap;
                             if (item.master_jabatan) {
                                 val_karyawan += ' - ' + item.master_jabatan.nama_jabatan;
