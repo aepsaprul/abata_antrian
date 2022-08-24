@@ -27,14 +27,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         // Pusher.logToConsole = true;
 
         // dev
-        var pusher = new Pusher('07d3c75f0970790e45c6', {
-            cluster: 'ap1'
-        });
-
-        // prod
-        // var pusher = new Pusher('2f72f827ef95c4adf968', {
+        // var pusher = new Pusher('07d3c75f0970790e45c6', {
         //     cluster: 'ap1'
         // });
+
+        // prod
+        var pusher = new Pusher('2f72f827ef95c4adf968', {
+            cluster: 'ap1'
+        });
 
         // customer ke total antrian
 		var customer_display = pusher.subscribe('customer-display');
