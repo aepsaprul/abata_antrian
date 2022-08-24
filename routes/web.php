@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccessController;
+use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DisplayCustomerController;
@@ -84,26 +85,43 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('customer/{id}/delete_btn', [CustomerController::class, 'deleteBtn'])->name('customer.delete_btn');
     Route::post('customer/delete', [CustomerController::class, 'delete'])->name('customer.delete');
 
-    // situmpur
+    // antrian
+        // cs
+        Route::get('antrian/page_cs', [AntrianController::class, 'cs'])->name('antrian_cs');
+        Route::get('antrian/page_cs/nomor', [AntrianController::class, 'csNomor'])->name('antrian_cs.nomor');
+        Route::get('antrian/page_cs/{id}/status/{status}', [AntrianController::class, 'csStatus'])->name('antrian_cs.status');
+        Route::get('antrian/page_cs/{nomor}/panggil', [AntrianController::class, 'csPanggil'])->name('antrian_cs.panggil');
+        Route::get('antrian/page_cs/{nomor}/jenis/{nama_jenis}', [AntrianController::class, 'csUpdate'])->name('antrian_cs.update');
+        Route::get('antrian/page_cs/{nomor}/batal', [AntrianController::class, 'csBatal'])->name('antrian_cs.batal');
+        Route::get('antrian/page_cs/{nomor}/mulai', [AntrianController::class, 'csMulai'])->name('antrian_cs.mulai');
+        // Route::get('antrian/page_cs/mulai/counter', [AntrianController::class, 'csMulaiCounter'])->name('antrian_cs.mulai.counter');
+        Route::get('antrian/page_cs/{nomor}/selesai', [AntrianController::class, 'csSelesai'])->name('antrian_cs.selesai');
+        Route::get('antrian/page_cs/{nomor}/pindah', [AntrianController::class, 'csPindah'])->name('antrian_cs.pindah');
+
         // customer
-        Route::get('situmpur/page_customer', [SitumpurController::class, 'customer'])->name('situmpur_customer');
-        Route::get('situmpur/page_customer/{id}/form', [SitumpurController::class, 'customerForm'])->name('situmpur_customer.form');
-        Route::post('situmpur/page_customer/search', [SitumpurController::class, 'customerSearch'])->name('situmpur_customer.search');
-        Route::post('situmpur/page_customer/store', [SitumpurController::class, 'customerStore'])->name('situmpur.customer.store');
-        Route::get('situmpur/reset_antrian', [SitumpurController::class, 'resetAntrian'])->name('situmpur_reset_antrian');
+        Route::get('antrian/page_customer', [AntrianController::class, 'customer'])->name('antrian_customer');
+        Route::get('antrian/page_customer/{id}/form', [AntrianController::class, 'customerForm'])->name('antrian_customer.form');
+        Route::post('antrian/page_customer/search', [AntrianController::class, 'customerSearch'])->name('antrian_customer.search');
+        Route::post('antrian/page_customer/store', [AntrianController::class, 'customerStore'])->name('antrian.customer.store');
+        Route::get('antrian/reset_antrian', [AntrianController::class, 'resetAntrian'])->name('antrian_reset_antrian');
 
         // desain
-        Route::get('situmpur/page_desain', [SitumpurController::class, 'desain'])->name('situmpur_desain');
-        Route::get('situmpur/page_desain/nomor', [SitumpurController::class, 'desainNomor'])->name('situmpur_desain.nomor');
-        Route::get('situmpur/page_desain/{id}/on', [SitumpurController::class, 'desainOn'])->name('situmpur_desain.on');
-        Route::get('situmpur/page_desain/{id}/off', [SitumpurController::class, 'desainOff'])->name('situmpur_desain.off');
-        Route::get('situmpur/page_desain/{nomor}/panggil', [SitumpurController::class, 'desainPanggil'])->name('situmpur_desain.panggil');
-        Route::get('situmpur/page_desain/{nomor}/jenis/{nama_jenis}', [SitumpurController::class, 'desainUpdate'])->name('situmpur_desain.update');
-        Route::get('situmpur/page_desain/{nomor}/batal', [SitumpurController::class, 'desainBatal'])->name('situmpur_desain.batal');
-        Route::get('situmpur/page_desain/{nomor}/mulai', [SitumpurController::class, 'desainMulai'])->name('situmpur_desain.mulai');
-        Route::get('situmpur/page_desain/mulai/counter', [SitumpurController::class, 'desainMulaiCounter'])->name('situmpur_desain.mulai.counter');
-        Route::get('situmpur/page_desain/{nomor}/selesai', [SitumpurController::class, 'desainSelesai'])->name('situmpur_desain.selesai');
+        Route::get('antrian/page_desain', [AntrianController::class, 'desain'])->name('antrian_desain');
+        Route::get('antrian/page_desain/nomor', [AntrianController::class, 'desainNomor'])->name('antrian_desain.nomor');
+        Route::get('antrian/page_desain/{id}/status/{status}', [AntrianController::class, 'desainStatus'])->name('antrian_desain.status');
+        Route::get('antrian/page_desain/{nomor}/panggil', [AntrianController::class, 'desainPanggil'])->name('antrian_desain.panggil');
+        Route::get('antrian/page_desain/{nomor}/jenis/{nama_jenis}', [AntrianController::class, 'desainUpdate'])->name('antrian_desain.update');
+        Route::get('antrian/page_desain/{nomor}/batal', [AntrianController::class, 'desainBatal'])->name('antrian_desain.batal');
+        Route::get('antrian/page_desain/{nomor}/mulai', [AntrianController::class, 'desainMulai'])->name('antrian_desain.mulai');
+        Route::get('antrian/page_desain/mulai/counter', [AntrianController::class, 'desainMulaiCounter'])->name('antrian_desain.mulai.counter');
+        Route::get('antrian/page_desain/{nomor}/selesai', [AntrianController::class, 'desainSelesai'])->name('antrian_desain.selesai');
 
         // display
-        Route::get('situmpur/page_display', [SitumpurController::class, 'display'])->name('situmpur_display');
+        Route::get('antrian/page_display', [AntrianController::class, 'display'])->name('antrian_display');
+
+        // cs to desain
+        Route::get('antrian/page_cs_to_desain/nomor', [AntrianController::class, 'csToDesainNomor'])->name('antrian_cs_to_desain.nomor');
+        Route::get('antrian/page_cs_to_desain/{nomor}/panggil', [AntrianController::class, 'csToDesainPanggil'])->name('antrian_cs_to_desain.panggil');
+        Route::get('antrian/page_cs_to_desain/{nomor}/mulai', [AntrianController::class, 'csToDesainMulai'])->name('antrian_cs_to_desain.mulai');
+        Route::get('antrian/page_cs_to_desain/{nomor}/selesai', [AntrianController::class, 'csToDesainSelesai'])->name('antrian_cs_to_desain.selesai');
 });

@@ -312,16 +312,14 @@
                 url: "{{ URL::route('user.create') }}",
                 type: "get",
                 success: function (response) {
-                    console.log(response.karyawans);
-
                     let val_karyawan = '<option value="">--Pilih Karyawan--</option>';
                     $.each(response.karyawans, function (index, item) {
                         val_karyawan += '<option value="' + item.id + '_' + item.nama_lengkap + '_' + item.email + '">' + item.nama_lengkap;
-                            if (item.master_jabatan) {
-                                val_karyawan += ' - ' + item.master_jabatan.nama_jabatan;
+                            if (item.jabatan) {
+                                val_karyawan += ' - ' + item.jabatan.nama_jabatan;
                             }
-                            if (item.master_cabang) {
-                                val_karyawan += ' - ' + item.master_cabang.nama_cabang;
+                            if (item.cabang) {
+                                val_karyawan += ' - ' + item.cabang.nama_cabang;
                             }
                         val_karyawan +='</option>';
                     })

@@ -18,6 +18,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        // $user = User::with('antrianUser')->orderBy('id', 'desc')->get();
         $user = User::with('antrianUser')->where('master_karyawan_id', '!=', 0)->orderBy('id', 'desc')->get();
         $antrian_user = AntrianUser::get();
 
@@ -42,7 +43,10 @@ class UserController extends Controller
 
     public function create()
     {
-        $karyawan = Karyawan::with(['jabatan', 'cabang'])->orderBy('master_cabang_id')->get();
+        $karyawan = Karyawan::with(['jabatan', 'cabang'])
+            ->where('status', 'Aktif')
+            ->orderBy('master_cabang_id')
+            ->get();
 
         return response()->json([
             'karyawans' => $karyawan

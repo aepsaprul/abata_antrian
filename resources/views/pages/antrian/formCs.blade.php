@@ -18,7 +18,7 @@
                         <center>
                             <img src="{{ asset('public/assets/logo-bg-blue.png') }}" alt="">
                         </center>
-                        <form role="form" action="{{ route('situmpur.customer.store') }}" method="POST">
+                        <form role="form" action="{{ route('antrian.customer.store') }}" method="POST">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group">
@@ -71,7 +71,7 @@
             var value = $(this).val();
             if (value.length >= 10) {
                 $.ajax({
-                    url: "{{ URL::route('situmpur_customer.search') }}",
+                    url: "{{ URL::route('antrian_customer.search') }}",
                     type: 'POST',
                     data: {
                         value: value
