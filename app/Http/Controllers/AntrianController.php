@@ -29,6 +29,11 @@ class AntrianController extends Controller
         return view('pages.antrian.customer');
     }
 
+    public function customerPbg()
+    {
+        return view('pages.antrian.customerPbg');
+    }
+
     public function customerForm($id)
     {
         if ($id == '3') {
@@ -59,6 +64,44 @@ class AntrianController extends Controller
             }
 
             return view('pages.antrian.formDesain', [
+                'customer_filter_id' => $id,
+                'nomors' => $nomors,
+                'count_nomor_panggil' => $count_nomor_panggil,
+                'count_nomor_all' => $count_nomor_all
+            ]);
+        }
+    }
+
+    public function customerFormPbg($id)
+    {
+        if ($id == '3') {
+            if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
+                $nomors = AntrianSementara::where('cabang_id', 1)->where('jabatan', 'cs')->where('keterangan', '!=', 'desain')->orderBy('id', 'desc')->first();
+                $count_nomor_panggil = count(AntrianSementara::where('cabang_id', 1)->where('jabatan', 'cs')->where('keterangan', '!=', 'desain')->where('status','!=', '0')->get());
+                $count_nomor_all = count(AntrianSementara::where('cabang_id', 1)->where('jabatan', 'cs')->where('keterangan', '!=', 'desain')->get());
+            } else {
+                $nomors = AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('jabatan', 'cs')->where('keterangan', '!=', 'desain')->orderBy('id', 'desc')->first();
+                $count_nomor_panggil = count(AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('jabatan', 'cs')->where('keterangan', '!=', 'desain')->where('status','!=', '0')->get());
+                $count_nomor_all = count(AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('jabatan', 'cs')->where('keterangan', '!=', 'desain')->get());
+            }
+            return view('pages.antrian.formCsPbg', [
+                'customer_filter_id' => $id,
+                'nomors' => $nomors,
+                'count_nomor_panggil' => $count_nomor_panggil,
+                'count_nomor_all' => $count_nomor_all
+            ]);
+        } else {
+            if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
+                $nomors = AntrianSementara::where('cabang_id', 1)->where('jabatan', 'desain')->where('keterangan', '!=', 'cs')->orderBy('id', 'desc')->first();
+                $count_nomor_panggil = count(AntrianSementara::where('cabang_id', 1)->where('jabatan', 'desain')->where('keterangan', '!=', 'cs')->where('status','!=', '0')->get());
+                $count_nomor_all = count(AntrianSementara::where('cabang_id', 1)->where('jabatan', 'desain')->where('keterangan', '!=', 'cs')->get());
+            } else {
+                $nomors = AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('jabatan', 'desain')->where('keterangan', '!=', 'cs')->orderBy('id', 'desc')->first();
+                $count_nomor_panggil = count(AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('jabatan', 'desain')->where('keterangan', '!=', 'cs')->where('status','!=', '0')->get());
+                $count_nomor_all = count(AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->where('jabatan', 'desain')->where('keterangan', '!=', 'cs')->get());
+            }
+
+            return view('pages.antrian.formDesainPbg', [
                 'customer_filter_id' => $id,
                 'nomors' => $nomors,
                 'count_nomor_panggil' => $count_nomor_panggil,

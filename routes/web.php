@@ -105,6 +105,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('antrian/page_customer/store', [AntrianController::class, 'customerStore'])->name('antrian.customer.store');
         Route::get('antrian/reset_antrian', [AntrianController::class, 'resetAntrian'])->name('antrian_reset_antrian');
 
+        Route::get('antrian/page_customer_pbg', [AntrianController::class, 'customerPbg'])->name('antrian_customer_pbg');
+        Route::get('antrian/page_customer_pbg/{id}/form', [AntrianController::class, 'customerFormPbg'])->name('antrian_customer_pbg.form');
+
         // desain
         Route::get('antrian/page_desain', [AntrianController::class, 'desain'])->name('antrian_desain');
         Route::get('antrian/page_desain/nomor', [AntrianController::class, 'desainNomor'])->name('antrian_desain.nomor');
