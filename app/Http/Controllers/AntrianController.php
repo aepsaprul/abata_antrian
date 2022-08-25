@@ -19,6 +19,7 @@ use App\Models\MasterCustomer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class AntrianController extends Controller
 {
@@ -99,6 +100,7 @@ class AntrianController extends Controller
         $antrian_sementara->nama_customer = $request->nama_customer;
         $antrian_sementara->telepon = $request->telepon;
         $antrian_sementara->customer_filter_id = $request->customer_filter_id;
+        $sisa_antrian = $request->sisa_antrian;
 
         if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
             $antrian_sementara->cabang_id = 1;
@@ -111,9 +113,11 @@ class AntrianController extends Controller
         if ($request->customer_filter_id == '3') {
             $antrian_sementara->jabatan = "cs";
             $antrian_sementara->keterangan = "cs";
+            $nomor_antrian_e = "C" . $request->nomor_antrian;
         } else {
             $antrian_sementara->jabatan = "desain";
             $antrian_sementara->keterangan = "desain";
+            $nomor_antrian_e = "D" . $request->nomor_antrian;
         }
 
         $antrian_sementara->save();
@@ -132,7 +136,13 @@ class AntrianController extends Controller
         event(new EventCustomerDesain($cabang_id, $nomor_antrian, $nama, $telepon, $customer_filter_id));
         event(new EventCustomerDisplay($cabang_id, $total_antrian, $customer_filter_id));
 
-        return redirect()->route('antrian_customer');
+        if (Auth::user()->karyawan->master_cabang_id == 5) {
+            // $url = "http://localhost/test/escpos/vendor/mike42/escpos-php/example/barcode.php?nomor_antrian=".$request->nomor_antrian."&sisa_antrian=".$request->sisa_antrian;
+            $url = "http://localhost/posprint/vendor/mike42/escpos-php/example/barcode.php?nomor_antrian=" . $nomor_antrian_e . "&sisa_antrian=" . $sisa_antrian;
+            return Redirect::to($url);
+        } else {
+            return redirect()->route('antrian_customer');
+        }
     }
 
     public function resetAntrian()
