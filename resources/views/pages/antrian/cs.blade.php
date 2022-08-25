@@ -14,6 +14,7 @@
                     {{-- <span class="stopwatch h3">00:00:00</span> --}}
                 </p>
                 <p style="text-align: center;">
+                    <a href="{{ route('antrian_reset_antrian') }}" class="btn btn-danger" onclick="confirm('Yakin akan di reset?')">Reset Antrian</a>
                     {{-- @if (Auth::user()->roles == "admin")
                         <a href="#" class="btn btn-danger btn-sm">Komputer OFF</a>
                     @else

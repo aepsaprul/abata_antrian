@@ -196,7 +196,11 @@ class AntrianController extends Controller
             AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->delete();
         }
 
-        return redirect()->route('antrian_customer');
+        if (Auth::user()->karyawan->master_cabang_id == 5) {
+            return redirect()->route('antrian_cs');
+        } else {
+            return redirect()->route('antrian_customer');
+        }
     }
 
     // cs
