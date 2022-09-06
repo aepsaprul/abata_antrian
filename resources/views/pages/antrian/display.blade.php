@@ -181,7 +181,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			$('.antrian_cs').append(queryNomorAntrian);
 			$('.number-cs').append(queryNomorAntrian);
 
-			antrianCs(data.antrian_nomor);
+            if (user.karyawan.master_cabang_id == data.cabang_id) {
+                antrianCs(data.antrian_nomor);
+            }
 		});
 
         // cs klik selesai

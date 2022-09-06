@@ -68,7 +68,7 @@
 @endsection
 
 @section('script')
-{{-- <script src="https://js.pusher.com/7.1/pusher.min.js"></script> --}}
+
 <script>
     let user_cabang_id = $('#cabang_id').val();
     let user_karyawan_id = {!! Auth::user()->master_karyawan_id !!};
