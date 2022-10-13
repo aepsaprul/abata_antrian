@@ -128,7 +128,6 @@
                         value: value
                     },
                     success: function(response) {
-                        console.log(response);
                         $.each(response.customers, function (i, value) {
                             var data_customers = "<li><button class=\"btn-data-customer\" data-value=\"" + value.telepon + "-" + value.nama_customer + "\">" + value.telepon + " | " + value.nama_customer + "</button></li>";
                             $('.telepon .telepon-data').append(data_customers);

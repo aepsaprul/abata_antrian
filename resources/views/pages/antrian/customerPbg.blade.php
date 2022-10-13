@@ -21,7 +21,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <img src="{{ asset('assets/dist/img/logo-bg-blue.png') }}" alt="">
+    <img src="{{ asset('public/assets/dist/img/logo-bg-blue.png') }}" alt="">
   </div>
 	<div class="social-auth-links text-center mb-3">
 		<a href="{{ url('antrian/page_customer_pbg/1/form') }}" class="btn-siap btn btn-block btn-primary pt-3 pb-3 pr-5 pl-5" style="font-size: 2em; font-weight: bold;">
