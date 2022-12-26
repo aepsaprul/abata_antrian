@@ -4,6 +4,7 @@ use App\Http\Controllers\AccessController;
 use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DesignOfflineController;
 use App\Http\Controllers\DisplayCustomerController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\NavigasiController;
@@ -127,4 +128,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('antrian/page_cs_to_desain/{nomor}/panggil', [AntrianController::class, 'csToDesainPanggil'])->name('antrian_cs_to_desain.panggil');
         Route::get('antrian/page_cs_to_desain/{nomor}/mulai', [AntrianController::class, 'csToDesainMulai'])->name('antrian_cs_to_desain.mulai');
         Route::get('antrian/page_cs_to_desain/{nomor}/selesai', [AntrianController::class, 'csToDesainSelesai'])->name('antrian_cs_to_desain.selesai');
+
+        // design offline
+        Route::get('design_offline/customer', [DesignOfflineController::class, 'customer'])->name('design_offline.customer');
+        Route::get('design_offline/desain', [DesignOfflineController::class, 'desain'])->name('design_offline.desain');
+        Route::get('design_offline/desain/upload', [DesignOfflineController::class, 'desainUpload'])->name('design_offline.desain.upload');
 });
