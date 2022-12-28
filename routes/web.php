@@ -131,6 +131,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         // design offline
         Route::get('design_offline/customer', [DesignOfflineController::class, 'customer'])->name('design_offline.customer');
+        Route::post('design_offline/customer/store', [DesignOfflineController::class, 'customerStore'])->name('design_offline.customer.store');
+        Route::post('design_offline/customer/search', [DesignOfflineController::class, 'customerSearch'])->name('design_offline.customer.search');
+
         Route::get('design_offline/desain', [DesignOfflineController::class, 'desain'])->name('design_offline.desain');
         Route::get('design_offline/desain/upload', [DesignOfflineController::class, 'desainUpload'])->name('design_offline.desain.upload');
 });
