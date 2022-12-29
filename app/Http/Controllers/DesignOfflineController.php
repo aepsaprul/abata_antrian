@@ -30,7 +30,7 @@ class DesignOfflineController extends Controller
     $konsep_sementara = new KonsepSementara;
     $konsep_sementara->customer_id = $request->konsumen_id;
     $konsep_sementara->harga_desain = $request->harga_desain;
-    $konsep_sementara->status_id = 1;
+    $konsep_sementara->status_id = 0;
     $konsep_sementara->karyawan_id = Auth::user()->master_karyawan_id;
 
     if (Auth::user()->roles == "admin") {
@@ -50,8 +50,44 @@ class DesignOfflineController extends Controller
     return view('pages.design_offline.desain.index');
   }
 
-  public function desainUpload()
+  public function desainData()
   {
-    return view('pages.design_offline.desain.upload');
+    $konsep_sementara = KonsepSementara::with('customer')
+      ->where('status_id', '!=', '5')
+      ->get();
+
+    return view('pages.design_offline.desain.konsepSementara', ['konsep_sementaras' => $konsep_sementara]);
+  }
+
+  public function desainUpdate(Request $request, $id)
+  {
+    $konsep_sementara = KonsepSementara::find($id);
+
+    if ($request->status == "ambil") {
+      $konsep_sementara->status_id = 1;
+      $konsep_sementara->karyawan_id = Auth::user()->master_karyawan_id;
+    } else if ($request->status == "approv") {
+      $konsep_sementara->status_id = 2;
+    } else if ($request->status == "revisi") {
+      $konsep_sementara->status_id = 3;
+    } else if ($request->status == "selesai") {
+      $konsep_sementara->status_id = 4;
+    } else {
+      $konsep_sementara->status_id = 5;
+      $konsep_sementara->gambar = $request->gambar;
+    }
+    
+    $konsep_sementara->save();
+
+    return response()->json([
+      'status' => $request->all()
+    ]);
+  }
+
+  public function desainUpload($id)
+  {
+    $konsep_sementara = KonsepSementara::with('customer')->find($id);
+
+    return view('pages.design_offline.desain.upload', ['konsep_sementara' => $konsep_sementara]);
   }
 }
