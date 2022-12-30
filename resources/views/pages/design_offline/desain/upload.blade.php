@@ -35,19 +35,19 @@
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Lama Pengerjaan</p>
                     <p style="width: 10%;">:</p>
-                    <p class="text-right font-weight-bold" style="width: 40%;">00:45:00</p>
+                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep_sementara->waktu }}</p>
                   </div>
                 </div>
                 <div class="col-6 pl-5">
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Tanggal Masuk</p>
                     <p style="width: 10%;">:</p>
-                    <p class="text-right font-weight-bold" style="width: 40%;">11-08-2022</p>
+                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep_sementara->created_at }}</p>
                   </div>
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Tanggal Selesai</p>
                     <p style="width: 10%;">:</p>
-                    <p class="text-right font-weight-bold" style="width: 40%;">12-08-2022</p>
+                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep_timer->created_at }}</p>
                   </div>
                 </div>
               </div>
