@@ -100,7 +100,8 @@ class DesignOfflineController extends Controller
     $waktu_sekarang = strtotime(waktu($konsep->updated_at, date('Y-m-d H:i:s'))) - $default; // selisih waktu approv dan ambil konsep
     $waktu_total = $waktu_db + $waktu_sekarang; // field waktu DB di tambah selisih waktu (approve & ambil konsep)
     $h = floor($waktu_total / (60 * 60)); // hasil penjumlahan di jadikan jam
-    $m = intval($waktu_total / 60); // sisa hasil penjumlahan dijadikan menit
+    $sisa_d = $waktu_total - $h * (60 * 60);
+    $m = floor($sisa_d / 60); // sisa hasil penjumlahan dijadikan menit
     if ($h < 10) {$h_fix = '0'.$h;} else {$h_fix = $h;} // jam dibawah 10 tambah 0 didepan
     if ($m < 10) {$m_fix = '0'.$m;} else {$m_fix = $m;} // menit dibawah 10 tambah 0 didepan
 
@@ -133,7 +134,7 @@ class DesignOfflineController extends Controller
     $konsep_timer->save();
 
     return response()->json([
-      'status' => $request->all()
+      'status' => $m
     ]);
   }
 
