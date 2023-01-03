@@ -53,8 +53,15 @@ class DesignOfflineController extends Controller
 
   public function desainData()
   {
+    if (Auth::user()->roles == "admin") {
+      $cabang = 1;      
+    } else {
+      $cabang = Auth::user()->karyawan->master_cabang_id;
+    }
+    
     $konsep = Konsep::with('customer')
       ->where('status_id', '!=', '5')
+      ->where('cabang_id', $cabang)
       ->get();
 
     $konsep_timer = KonsepTimer::select('konsep_id', 'user_id')->groupByRaw('konsep_id, user_id')->get();
