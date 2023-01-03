@@ -7,6 +7,13 @@
 
 @section('content')
 
+@php
+  function rupiah($angka){
+    $hasil =  number_format($angka,0, ',' , '.');
+    return $hasil;
+  }
+@endphp
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -30,7 +37,7 @@
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Harga Desain</p>
                     <p style="width: 10%;">:</p>
-                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep->harga_desain }}</p>
+                    <p class="text-right font-weight-bold" style="width: 40%;">{{ rupiah($konsep->harga_desain) }}</p>
                   </div>
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Lama Pengerjaan</p>
