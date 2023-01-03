@@ -10,6 +10,10 @@ class KonsepTimer extends Model
 {
   use HasFactory;
 
+  public function user() {
+    return $this->belongsTo(User::class, 'user_id', 'id');
+  }
+
   public function getCreatedAtAttribute() {
     return Carbon::parse($this->attributes['created_at'])->translatedFormat('d-m-Y');
   }

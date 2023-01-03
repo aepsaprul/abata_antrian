@@ -19,30 +19,30 @@
         <div class="col-8">
           <div class="card">
             <div class="card-body">
-              <input type="hidden" name="konsep_id" id="konsep_id" value="{{ $konsep_sementara->id }}">
+              <input type="hidden" name="konsep_id" id="konsep_id" value="{{ $konsep->id }}">
               <div class="row">
                 <div class="col-6 pr-5">
                   <div class="d-flex justify-content-between">
                     <p class="g" style="width: 50%;">Nama Konsumen</p>
                     <p class="" style="width: 10%;">:</p>
-                    <p class="text-uppercase text-right font-weight-bold" style="width: 40%;">{{ $konsep_sementara->customer->nama_customer }}</p>
+                    <p class="text-uppercase text-right font-weight-bold" style="width: 40%;">{{ $konsep->customer->nama_customer }}</p>
                   </div>
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Harga Desain</p>
                     <p style="width: 10%;">:</p>
-                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep_sementara->harga_desain }}</p>
+                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep->harga_desain }}</p>
                   </div>
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Lama Pengerjaan</p>
                     <p style="width: 10%;">:</p>
-                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep_sementara->waktu }}</p>
+                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep->waktu }}</p>
                   </div>
                 </div>
                 <div class="col-6 pl-5">
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Tanggal Masuk</p>
                     <p style="width: 10%;">:</p>
-                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep_sementara->created_at }}</p>
+                    <p class="text-right font-weight-bold" style="width: 40%;">{{ $konsep->created_at }}</p>
                   </div>
                   <div class="d-flex justify-content-between">
                     <p style="width: 50%;">Tanggal Selesai</p>

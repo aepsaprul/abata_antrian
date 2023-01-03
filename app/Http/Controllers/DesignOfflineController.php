@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KonsepSementara;
+use App\Models\Konsep;
 use App\Models\KonsepTimer;
 use App\Models\MasterCustomer;
 use Illuminate\Http\Request;
@@ -28,18 +28,18 @@ class DesignOfflineController extends Controller
 
   public function customerStore(Request $request)
   {
-    $konsep_sementara = new KonsepSementara;
-    $konsep_sementara->customer_id = $request->konsumen_id;
-    $konsep_sementara->harga_desain = $request->harga_desain;
-    $konsep_sementara->status_id = 0;
-    $konsep_sementara->karyawan_id = Auth::user()->master_karyawan_id;
+    $konsep = new Konsep();
+    $konsep->customer_id = $request->konsumen_id;
+    $konsep->harga_desain = $request->harga_desain;
+    $konsep->status_id = 0;
+    $konsep->user_id = Auth::user()->id;
 
     if (Auth::user()->roles == "admin") {
-      $konsep_sementara->cabang_id = 1;      
+      $konsep->cabang_id = 1;      
     } else {
-      $konsep_sementara->cabang_id = Auth::user()->karyawan->master_cabang_id;
+      $konsep->cabang_id = Auth::user()->karyawan->master_cabang_id;
     }
-    $konsep_sementara->save();
+    $konsep->save();
 
     return response()->json([
       'status' => $request->all()
@@ -53,11 +53,13 @@ class DesignOfflineController extends Controller
 
   public function desainData()
   {
-    $konsep_sementara = KonsepSementara::with('customer')
+    $konsep = Konsep::with('customer')
       ->where('status_id', '!=', '5')
       ->get();
 
-    return view('pages.design_offline.desain.konsepSementara', ['konsep_sementaras' => $konsep_sementara]);
+    $konsep_timer = KonsepTimer::select('konsep_id', 'user_id')->groupByRaw('konsep_id, user_id')->get();
+
+    return view('pages.design_offline.desain.konsepSementara', ['konseps' => $konsep, 'konsep_timers' => $konsep_timer]);
   }
 
   public function desainUpdate(Request $request, $id)
@@ -84,11 +86,11 @@ class DesignOfflineController extends Controller
       return $jam_fix . ":" . $menit_fix . ":00";
     }
     
-    $konsep_sementara = KonsepSementara::find($id);
+    $konsep = Konsep::find($id);
 
     $default = strtotime('00:00:00'); // default detik
-    $waktu_db = strtotime($konsep_sementara->waktu) - $default; // field waktu yg ada di DB di kurangi default
-    $waktu_sekarang = strtotime(waktu($konsep_sementara->updated_at, date('Y-m-d H:i:s'))) - $default; // selisih waktu approv dan ambil konsep
+    $waktu_db = strtotime($konsep->waktu) - $default; // field waktu yg ada di DB di kurangi default
+    $waktu_sekarang = strtotime(waktu($konsep->updated_at, date('Y-m-d H:i:s'))) - $default; // selisih waktu approv dan ambil konsep
     $waktu_total = $waktu_db + $waktu_sekarang; // field waktu DB di tambah selisih waktu (approve & ambil konsep)
     $h = floor($waktu_total / (60 * 60)); // hasil penjumlahan di jadikan jam
     $m = intval($waktu_total / 60); // sisa hasil penjumlahan dijadikan menit
@@ -97,30 +99,30 @@ class DesignOfflineController extends Controller
 
     if ($request->status == "ambil") {
       $status_id = 1;
-      $konsep_sementara->status_id = $status_id;
-      $konsep_sementara->karyawan_id = Auth::user()->master_karyawan_id;
+      $konsep->status_id = $status_id;
+      $konsep->user_id = Auth::user()->id;
     } else if ($request->status == "approv") {
       $status_id = 2;
-      $konsep_sementara->status_id = $status_id;
-      $konsep_sementara->waktu = $h_fix . ':' . $m_fix . ':00';
+      $konsep->status_id = $status_id;
+      $konsep->waktu = $h_fix . ':' . $m_fix . ':00';
     } else if ($request->status == "revisi") {
       $status_id = 3;
-      $konsep_sementara->status_id = $status_id;
+      $konsep->status_id = $status_id;
     } else if ($request->status == "selesai") {
       $status_id = 4;
-      $konsep_sementara->status_id = $status_id;
+      $konsep->status_id = $status_id;
     } else {
       $status_id = 5;
-      $konsep_sementara->status_id = $status_id;
-      $konsep_sementara->gambar = $request->gambar;
+      $konsep->status_id = $status_id;
+      $konsep->gambar = $request->gambar;
     }
     
-    $konsep_sementara->save();
+    $konsep->save();
 
     $konsep_timer = new KonsepTimer;
     $konsep_timer->konsep_id = $id;
     $konsep_timer->status_id = $status_id;
-    $konsep_timer->karyawan_id = Auth::user()->master_karyawan_id;
+    $konsep_timer->user_id = Auth::user()->id;
     $konsep_timer->save();
 
     return response()->json([
@@ -130,9 +132,9 @@ class DesignOfflineController extends Controller
 
   public function desainUpload($id)
   {
-    $konsep_sementara = KonsepSementara::with('customer')->find($id);
-    $konsep_timer = KonsepTimer::where('konsep_id', $konsep_sementara->id)->where('status_id', '4')->first();
+    $konsep = Konsep::with('customer')->find($id);
+    $konsep_timer = KonsepTimer::where('konsep_id', $konsep->id)->where('status_id', '4')->first();
 
-    return view('pages.design_offline.desain.upload', ['konsep_sementara' => $konsep_sementara, 'konsep_timer' => $konsep_timer]);
+    return view('pages.design_offline.desain.upload', ['konsep' => $konsep, 'konsep_timer' => $konsep_timer]);
   }
 }
