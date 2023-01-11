@@ -17,3 +17,40 @@
 </div>
 @endsection
 
+@section('script')
+<script>
+  $(document).ready(function () {
+    tampil();
+    function tampil() {
+      setTimeout(() => {
+        tanggalAntrianSementara();
+        tampil();
+      }, 1000);
+    }
+
+    // reset
+    function reset() {
+      $.ajax({
+        url: "{{ URL::route('antrian_reset_antrian') }}",
+        type: "get"
+      })    
+    }
+
+    let tanggal = new Date();
+    let tanggal_sekarang = tanggal.getDate();
+
+    function tanggalAntrianSementara() {
+      $.ajax({
+        url: "{{ URL::route('antrian.tanggal') }}",
+        type: "get",
+        success: function (response) {
+          if (tanggal_sekarang != response.status) {
+            reset();
+          }
+        }
+      })
+    }
+  })
+</script>
+@endsection
+

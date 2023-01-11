@@ -129,15 +129,6 @@
         </aside>
 
         @yield('content')
-
-        <!-- Main Footer -->
-        {{-- <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">Abata</a>.</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.1.0
-            </div>
-        </footer> --}}
     </div>
     <!-- ./wrapper -->
 
@@ -153,19 +144,7 @@
     <!-- AdminLTE App -->
     <script src="{{ asset('public/themes/dist/js/adminlte.js') }}"></script>
 
-    <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
-
     <script>
-        // dev
-        var pusher = new Pusher('07d3c75f0970790e45c6', {
-            cluster: 'ap1'
-        });
-
-        // prod
-        // var pusher = new Pusher('2f72f827ef95c4adf968', {
-        //     cluster: 'ap1'
-        // });
-
         function tanggalIndo(date) {
             var date = new Date(date);
             var tahun = date.getFullYear();
