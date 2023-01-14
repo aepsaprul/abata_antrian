@@ -12,9 +12,7 @@ class DesignOfflineController extends Controller
 {
   public function customer()
   {
-    $customer = MasterCustomer::get();
-
-    return view('pages.design_offline.cutomer.index', ['customers' => $customer]);
+    return view('pages.design_offline.cutomer.index');
   }
 
   public function customerSearch(Request $request)

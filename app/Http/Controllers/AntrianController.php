@@ -22,7 +22,7 @@ class AntrianController extends Controller
     if ($antrian != null) {
       $tanggal = $antrian->created_at->format('d');
     } else {
-      $tanggal = 0;
+      $tanggal = date('d');
     }
     
 
@@ -199,9 +199,9 @@ class AntrianController extends Controller
   public function resetAntrian()
   {
     if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
-      AntrianSementara::where('cabang_id', 1)->delete();
+      AntrianSementara::truncate();
     } else {
-      AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->delete();
+      AntrianSementara::truncate();
     }
 
     return response()->json([
@@ -325,7 +325,11 @@ class AntrianController extends Controller
   public function notif()
   {
     $notif = AntrianNotif::get();
-    $cabang_id = Auth::user()->karyawan->master_cabang_id;
+    if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
+      $cabang_id = 1;
+    } else {
+      $cabang_id = Auth::user()->karyawan->master_cabang_id;
+    }
 
     return response()->json([
       'notifs' => $notif,
