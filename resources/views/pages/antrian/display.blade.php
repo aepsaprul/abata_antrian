@@ -100,7 +100,7 @@
     });
 
     // cs panggil
-    var desain_panggil = pusher.subscribe('cs-panggil');
+    var cs_panggil = pusher.subscribe('cs-panggil');
     cs_panggil.bind('cs-panggil-event', function(data) {
       if (user.master_cabang_id == data.cabang_id) {
         antrianCs(data.antrian_nomor);
