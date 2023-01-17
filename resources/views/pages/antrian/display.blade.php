@@ -78,6 +78,35 @@
       font-size: 1.5em;
     }
   </style>
+  
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  <script>
+    let user = {!! Auth::user()->karyawan !!};
+
+    var pusher = new Pusher('706037a308be51409f57', {
+      cluster: 'ap1'
+    });
+
+    // desain panggil
+    var desain_panggil = pusher.subscribe('desain-panggil');
+    desain_panggil.bind('desain-panggil-event', function(data) {
+      if (user.master_cabang_id == data.cabang_id) {          
+        if (data.cabang_id == 5) {
+          antrianDesainPbg(data.antrian_nomor, data.desain_nomor);
+        } else {
+          antrianDesain(data.antrian_nomor, data.desain_nomor);
+        }
+      }
+    });
+
+    // cs panggil
+    var desain_panggil = pusher.subscribe('cs-panggil');
+    cs_panggil.bind('cs-panggil-event', function(data) {
+      if (user.master_cabang_id == data.cabang_id) {
+        antrianCs(data.antrian_nomor);
+      }
+    });
+  </script>
 </head>
 <body class="hold-transition layout-top-nav">
   <div class="wrapper">
@@ -284,49 +313,49 @@
         })
       }
 
-      panggilAksi();
-      function panggilAksi() {
-        setTimeout(() => {
-          panggil();
-          panggilAksi();
-        }, 1000);
-      }
+    //   panggilAksi();
+    //   function panggilAksi() {
+    //     setTimeout(() => {
+    //       panggil();
+    //       panggilAksi();
+    //     }, 1000);
+    //   }
       
-      // panggil();
-      function panggil() {
-        $.ajax({
-          url: "{{ URL::route('antrian_display.panggil') }}",
-          type: "get",
-          success: function (response) {
-            if (response.panggils.length > 0) {
-              $.each(response.panggils, function (index, item) {
-                if (item.cabang_id == response.cabang_id) {
-                  if (item.cabang_id == 5) {
-                    antrianDesainPbg(item.antrian, item.nomor); 
-                  } else {
-                    antrianDesain(item.antrian, item.nomor);                    
-                  }
-                }
-              })
-            }
-          }
-        })
-      }
+    //   // panggil();
+    //   function panggil() {
+    //     $.ajax({
+    //       url: "{{ URL::route('antrian_display.panggil') }}",
+    //       type: "get",
+    //       success: function (response) {
+    //         if (response.panggils.length > 0) {
+    //           $.each(response.panggils, function (index, item) {
+    //             if (item.cabang_id == response.cabang_id) {
+    //               if (item.cabang_id == 5) {
+    //                 antrianDesainPbg(item.antrian, item.nomor); 
+    //               } else {
+    //                 antrianDesain(item.antrian, item.nomor);                    
+    //               }
+    //             }
+    //           })
+    //         }
+    //       }
+    //     })
+    //   }
 
-      panggilDeleteAksi();
-      function panggilDeleteAksi() {
-        setTimeout(() => {
-          panggilDelete();  
-          panggilDeleteAksi();        
-        }, 2000);
-      }
-      // panggilDelete();
-      function panggilDelete() {
-        $.ajax({
-          url: "{{ URL::route('antrian_display.panggil.delete') }}",
-          type: "get"
-        })
-      }
+    //   panggilDeleteAksi();
+    //   function panggilDeleteAksi() {
+    //     setTimeout(() => {
+    //       panggilDelete();  
+    //       panggilDeleteAksi();        
+    //     }, 2000);
+    //   }
+    //   // panggilDelete();
+    //   function panggilDelete() {
+    //     $.ajax({
+    //       url: "{{ URL::route('antrian_display.panggil.delete') }}",
+    //       type: "get"
+    //     })
+    //   }
     })
 
     function antrianDesain(angka, desain) {

@@ -1,5 +1,34 @@
 @extends('layouts.app')
 
+@section('style')
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script>
+  let user = {!! Auth::user()->karyawan !!};
+
+  var pusher = new Pusher('706037a308be51409f57', {
+    cluster: 'ap1'
+  });
+
+  // desain notification
+  var customer_desain = pusher.subscribe('customer-desain');
+  customer_desain.bind('customer-desain-event', function(data) {
+    if (user.master_cabang_id == data.cabang_id) {
+      Notification.requestPermission().then((permission => {
+        if (permission === "granted") {
+          const notification = new Notification("Ada Pengunjung Baru", {
+            body: "Buka Halaman"
+          })
+
+          notification.addEventListener("error", e => {
+            alert("error")
+          })
+        }
+      }))
+    }
+  });
+</script>
+@endsection
+
 @section('content')
 
 <!-- Content Wrapper. Contains page content -->

@@ -230,49 +230,49 @@
       })
     }
 
-    notifAksi();
-    function notifAksi() {
-      setTimeout(() => {
-        notif();
-        notifDelete();
-        notifAksi();
-      }, 3000);
-    }
+    // notifAksi();
+    // function notifAksi() {
+    //   setTimeout(() => {
+    //     notif();
+    //     notifDelete();
+    //     notifAksi();
+    //   }, 3000);
+    // }
     
     // notif();
-    function notif() {
-      $.ajax({
-        url: "{{ URL::route('antrian.notif') }}",
-        type: "get",
-        success: function (response) {
-          if (response.notifs.length > 0) {
-            $.each(response.notifs, function (index, item) {
-              if (item.cabang_id == response.cabang_id) {
-                Notification.requestPermission().then((permission => {
-                  if (permission === "granted") {
-                    const notification = new Notification("Ada Pengunjung Baru", {
-                      body: "Buka Halaman CS"
-                    })
+    // function notif() {
+    //   $.ajax({
+    //     url: "{{ URL::route('antrian.notif') }}",
+    //     type: "get",
+    //     success: function (response) {
+    //       if (response.notifs.length > 0) {
+    //         $.each(response.notifs, function (index, item) {
+    //           if (item.cabang_id == response.cabang_id) {
+    //             Notification.requestPermission().then((permission => {
+    //               if (permission === "granted") {
+    //                 const notification = new Notification("Ada Pengunjung Baru", {
+    //                   body: "Buka Halaman CS"
+    //                 })
 
-                    notification.addEventListener("error", e => {
-                      alert("error")
-                    })
-                  }
-                }))
-              }
-            })
-          }
-        }
-      })
-    }
+    //                 notification.addEventListener("error", e => {
+    //                   alert("error")
+    //                 })
+    //               }
+    //             }))
+    //           }
+    //         })
+    //       }
+    //     }
+    //   })
+    // }
 
     // notifDelete();
-    function notifDelete() {
-      $.ajax({
-        url: "{{ URL::route('antrian.notif.delete') }}",
-        type: "get"
-      })
-    }
+    // function notifDelete() {
+    //   $.ajax({
+    //     url: "{{ URL::route('antrian.notif.delete') }}",
+    //     type: "get"
+    //   })
+    // }
 	});
 </script>
 @endsection

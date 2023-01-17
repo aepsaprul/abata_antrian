@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EventCsPanggil;
+use App\Events\EventCustomerDesain;
+use App\Events\EventDesainPanggil;
 use App\Models\AntrianNotif;
 use App\Models\AntrianPanggil;
 use App\Models\AntrianPengunjung;
@@ -183,6 +186,8 @@ class AntrianController extends Controller
 
     $antrian_sementara->save();
 
+    event(new EventCustomerDesain($cabang_id));
+
     if (Auth::user()->karyawan) {
       if (Auth::user()->karyawan->master_cabang_id == 5) {
         // $url = "http://localhost/test/escpos/vendor/mike42/escpos-php/example/barcode.php?nomor_antrian=".$request->nomor_antrian."&sisa_antrian=".$request->sisa_antrian;
@@ -262,12 +267,13 @@ class AntrianController extends Controller
     }
 
     if ($request->aksi == "panggil") {
-      $panggil_data = new AntrianPanggil;
-      $panggil_data->jabatan = "cs";
-      $panggil_data->nomor = 1;
-      $panggil_data->antrian = $request->nomor;
-      $panggil_data->cabang_id = $cabang_id;
-      $panggil_data->save();
+      // $panggil_data = new AntrianPanggil;
+      // $panggil_data->jabatan = "cs";
+      // $panggil_data->nomor = 1;
+      // $panggil_data->antrian = $request->nomor;
+      // $panggil_data->cabang_id = $cabang_id;
+      // $panggil_data->save();
+      event(new EventCsPanggil($cabang_id, $request->nomor));
     }
     
     if ($request->aksi == "panggil") {
@@ -399,12 +405,13 @@ class AntrianController extends Controller
     $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
 
     if ($request->aksi == "panggil") {
-      $panggil_data = new AntrianPanggil;
-      $panggil_data->jabatan = "desain";
-      $panggil_data->nomor = $antrian_user->nomor;
-      $panggil_data->antrian = $request->nomor;
-      $panggil_data->cabang_id = $cabang_id;
-      $panggil_data->save();
+      // $panggil_data = new AntrianPanggil;
+      // $panggil_data->jabatan = "desain";
+      // $panggil_data->nomor = $antrian_user->nomor;
+      // $panggil_data->antrian = $request->nomor;
+      // $panggil_data->cabang_id = $cabang_id;
+      // $panggil_data->save();
+      event(new EventDesainPanggil($cabang_id, $antrian_user->nomor, $request->nomor));
     }
 
     if ($request->aksi == "panggil") {
