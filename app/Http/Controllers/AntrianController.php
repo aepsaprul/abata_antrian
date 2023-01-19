@@ -163,26 +163,16 @@ class AntrianController extends Controller
       $antrian_sementara->cabang_id = Auth::user()->karyawan->master_cabang_id;
       $cabang_id = Auth::user()->karyawan->master_cabang_id;
     }
-
-    $antrian_notif = new AntrianNotif;
     
     if ($request->customer_filter_id == '3') {
       $antrian_sementara->jabatan = "cs";
       $antrian_sementara->keterangan = "cs";
       $nomor_antrian_e = "C" . $request->nomor_antrian;
-      
-      $antrian_notif->jabatan = "cs";
     } else {
       $antrian_sementara->jabatan = "desain";
       $antrian_sementara->keterangan = "desain";
       $nomor_antrian_e = "D" . $request->nomor_antrian;
-      
-      $antrian_notif->jabatan = "desain";
     }
-    
-    $antrian_notif->customer_filter_id = $request->customer_filter_id;
-    $antrian_notif->cabang_id = $cabang_id;
-    $antrian_notif->save();
 
     $antrian_sementara->save();
 
