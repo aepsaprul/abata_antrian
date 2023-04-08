@@ -99,6 +99,14 @@
       }
     });
 
+    // cs to desain
+    var cs_panggil = pusher.subscribe('cs-to-desain-panggil');
+    cs_panggil.bind('cs-to-desain-panggil-event', function(data) {
+      if (user.master_cabang_id == data.cabang_id) {
+        antrianCsToDesainPbg(data.antrian_nomor, data.desain_nomor);
+      }
+    });
+
     // cs panggil
     var cs_panggil = pusher.subscribe('cs-panggil');
     cs_panggil.bind('cs-panggil-event', function(data) {
@@ -124,7 +132,11 @@
           <div class="row cs">
             <div class="col-lg-8">
               <div class="card">
-                <iframe width="100%" height="770px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                {{-- <iframe width="100%" height="770px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --}}
+                {{-- <video width="100%" height="770px" autoplay controls loop>
+                  <source src="{{ asset('public/assets/dzikir-pagi.mp4') }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video> --}}
               </div>
             </div>
             <div class="col-lg-4 display-list-total" style="height: 770px;"></div>
@@ -137,10 +149,15 @@
     </div>
   </div>
 
-  <audio src="{{ asset('public/assets/ringtone/suara_antrian.mp3') }}" id="notif" controls style="display: none;"></audio>
+  <audio src="{{ asset('public/assets/ringtone/suara_antrian.mp3') }}" id="notif"  allow="autoplay" style="display: none;"></audio>
   <audio src="{{ asset('public/assets/ringtone/nomor-antrian.wav') }}" id="nomor_antrian" controls style="display: none;"></audio>
   <audio src="{{ asset('public/assets/ringtone/c.mp3') }}" id="c" controls style="display: none;"></audio>
   <audio src="{{ asset('public/assets/ringtone/d.mp3') }}" id="d" controls style="display: none;"></audio>
+
+  <audio src="{{ asset('public/assets/ringtone/1.mp3') }}" id="angka-desain-1" controls style="display: none;"></audio>
+  <audio src="{{ asset('public/assets/ringtone/2.mp3') }}" id="angka-desain-2" controls style="display: none;"></audio>
+  <audio src="{{ asset('public/assets/ringtone/3.mp3') }}" id="angka-desain-3" controls style="display: none;"></audio>
+  <audio src="{{ asset('public/assets/ringtone/4.mp3') }}" id="angka-desain-4" controls style="display: none;"></audio>
 
   {{-- nomor antrian --}}
   <audio src="{{ asset('public/assets/ringtone/1.mp3') }}" id="angka-1" controls style="display: none;"></audio>
@@ -277,6 +294,92 @@
   <script src="{{ asset('public/themes/dist/js/adminlte.min.js') }}"></script>
 
   <script>
+    const notif = "{{ URL::asset('public/assets/ringtone/suara_antrian.mp3') }}";
+    const nomor_antrian = "{{ URL::asset('public/assets/ringtone/nomor-antrian.wav') }}";
+    const c = "{{ URL::asset('public/assets/ringtone/c.mp3') }}";
+    const d = "{{ URL::asset('public/assets/ringtone/d.mp3') }}";
+    const kecs = "{{ URL::asset('public/assets/ringtone/ke-cs.wav') }}";
+    const kedesain = "{{ URL::asset('public/assets/ringtone/ke-desain.wav') }}";
+    
+    function antrianDesainPbg(angka, desain) {
+      const audio_notif = new Audio(notif);
+      const audio_nomor = new Audio(nomor_antrian);
+      const audio_d = new Audio(d);
+      const audio_kedesain = new Audio(kedesain);
+
+      const audio_file = document.getElementById("angka-" + angka);
+      const audio_desain = document.getElementById("angka-desain-" + desain);
+
+      audio_notif.play();
+      audio_notif.addEventListener("ended", () => {
+        audio_nomor.play();
+      })
+      audio_nomor.addEventListener("ended", () => {
+        audio_d.play();
+      })
+      audio_d.addEventListener("ended", () => {
+        audio_file.play();
+      })
+      audio_file.addEventListener("ended", () => {
+        audio_kedesain.play();
+      })
+      audio_kedesain.addEventListener("ended", () => {
+        audio_desain.play();
+      })
+    }
+
+    function antrianCsToDesainPbg(angka, desain) {
+      const audio_notif = new Audio(notif);
+      const audio_nomor = new Audio(nomor_antrian);
+      const audio_c = new Audio(c);
+      const audio_kedesain = new Audio(kedesain);
+      
+      const audio_file = document.getElementById("angka-" + angka);
+      const audio_desain = document.getElementById("angka-desain-" + desain);
+
+      audio_notif.play();
+      audio_notif.addEventListener("ended", () => {
+        audio_nomor.play();
+      })
+      audio_nomor.addEventListener("ended", () => {
+        audio_c.play();
+      })
+      audio_c.addEventListener("ended", () => {
+        audio_file.play();
+      })
+      audio_file.addEventListener("ended", () => {
+        audio_kedesain.play();
+      })
+      audio_kedesain.addEventListener("ended", () => {
+        audio_desain.play();
+      })
+    }
+    
+    function antrianCs(angka) {
+      const audio_notif = new Audio(notif);
+      const audio_nomor = new Audio(nomor_antrian);
+      const audio_c = new Audio(c);
+      const audio_kecs = new Audio(kecs);
+
+      const audio_file = document.getElementById("angka-" + angka);
+
+      audio_notif.play();
+      audio_notif.addEventListener("ended", () => {
+        audio_nomor.play();
+      })
+      audio_nomor.addEventListener("ended", () => {
+        audio_c.play();
+      })
+      audio_c.addEventListener("ended", () => {
+        audio_file.play();
+      })
+      audio_file.addEventListener("ended", () => {
+        audio_kecs.play();
+      })
+    }
+  </script>
+
+  <script>
     $(document).ready(function() {
       $.ajaxSetup({
         headers: {
@@ -293,7 +396,7 @@
         }, 1000);
       }
       
-      // displayList();
+      displayList();
       function displayList() {
         $.ajax({
           url: "{{ URL::route('antrian_display.list') }}",
@@ -358,39 +461,41 @@
     //   }
     })
 
-    function antrianDesain(angka, desain) {
-      setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
-      setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
-      setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 4300);
-      setTimeout(function(){ document.getElementById("kedesign").play(); }, 5000);
-      setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 6100);
-    }
+    // function antrianDesain(angka, desain) {
+    //   setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
+    //   setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
+    //   setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 4300);
+    //   setTimeout(function(){ document.getElementById("kedesign").play(); }, 5000);
+    //   setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 6100);
+    // }
 
-    function antrianDesainPbg(angka, desain) {
-      setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
-      setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
-      setTimeout(function(){ document.getElementById("d").play(); }, 4500);
-      setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 5000);
-      setTimeout(function(){ document.getElementById("kedesign").play(); }, 6000);
-      setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 7000);
-    }
+    // function antrianDesainPbg(angka, desain) {
+    //   setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
+    //   setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
+    //   setTimeout(function(){ document.getElementById("d").play(); }, 4500);
+    //   setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 5000);
+    //   setTimeout(function(){ document.getElementById("kedesign").play(); }, 6000);
+    //   setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 7000);
+    // }
 
-    function antrianCsToDesainPbg(angka, desain) {
-      setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
-      setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
-      setTimeout(function(){ document.getElementById("c").play(); }, 5000);
-      setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 6000);
-      setTimeout(function(){ document.getElementById("kedesign").play(); }, 8000);
-      setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 10000);
-    }
+    // function antrianCsToDesainPbg(angka, desain) {
+    //   setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
+    //   setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
+    //   setTimeout(function(){ document.getElementById("c").play(); }, 5000);
+    //   setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 6000);
+    //   setTimeout(function(){ document.getElementById("kedesign").play(); }, 8000);
+    //   setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 10000);
+    // }
 
-    function antrianCs(angka) {
-      setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
-      setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
-      setTimeout(function(){ document.getElementById("c").play(); }, 5000);
-      setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 6000);
-      setTimeout(function(){ document.getElementById("kecs").play(); }, 8000);
-    }
+    // function antrianCs(angka) {
+      // setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
+      // setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
+      // setTimeout(function(){ document.getElementById("c").play(); }, 5000);
+      // setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 6000);
+      // setTimeout(function(){ document.getElementById("kecs").play(); }, 8000);
+      // document.getElementById("notif").play();
+      // const
+    // }
   </script>
 </body>
 </html>

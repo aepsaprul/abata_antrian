@@ -6,7 +6,12 @@
     <div class="card-body">
       <p class="number" style="margin-top: 10px; font-size: 130px;">
         <span class="antrian_cs">
-          C {{ $antrian_terakhir_cs }}
+          C 
+          @if ($antrian_sementara_cs)
+            {{ $antrian_sementara_cs->nomor_antrian }}
+          @else
+            {{ $antrian_terakhir_cs }}              
+          @endif
         </span>
       </p>
     </div>
@@ -21,7 +26,12 @@
     <div class="card-body">
       <p class="number" style="margin-top: 10px; font-size: 130px;">
         <span class="antrian_desain">
-          D {{ $antrian_terakhir }}
+          D 
+          @if ($antrian_sementaras)
+            {{ $antrian_sementaras->nomor_antrian }}
+          @else
+            {{ $antrian_terakhir }}              
+          @endif
         </span>
       </p>
     </div>
@@ -37,7 +47,11 @@
     <div class="card-body">
       <p class="number" style="margin-top: 150px; font-size: 150px;">
         <span class="antrian_desain">
-          {{ $antrian_terakhir }}
+          @if ($antrian_sementaras)
+            {{ $antrian_sementaras->nomor_antrian }}
+          @else
+            {{ $antrian_terakhir }}              
+          @endif
         </span>
       </p>
     </div>

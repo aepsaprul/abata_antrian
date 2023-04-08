@@ -5,3 +5,6 @@ solusi .play() error
 - klik tanda seru sebelah kiri url
 - izinkan pop-up & pengahlihan
 - izinkan suara
+
+update
+- format audio tentukan mp3 / wav

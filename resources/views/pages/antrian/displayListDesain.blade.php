@@ -53,7 +53,7 @@
                 <div class="col-lg-3 desain-">
                   <div class="card">
                     <div class="card-header header-desain-">
-                      <h5 class="title desain-}">Desain {{ $item->nomor }}</h5>
+                      <h5 class="title">Desain {{ $item->nomor }}</h5>
                     </div>
                     <div class="card-body" style="height: 150px;">
                         <p class="number-">
@@ -98,9 +98,10 @@
         @if ($item->karyawan)
           @if ($item->karyawan->master_cabang_id == $cabang_id)
             <div class="col-lg-3 desain-">
+
               <div class="card">
                 <div class="card-header header-desain-">
-                  <h5 class="title desain-}">Desain {{ $item->nomor }}</h5>
+                  <h5 class="title">Desain {{ $item->nomor }}</h5>
                 </div>
                 <div class="card-body" style="height: 150px;">
                     <p class="number-">

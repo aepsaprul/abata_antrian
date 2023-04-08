@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\EventCsPanggil;
 use App\Events\EventCustomerDesain;
 use App\Events\EventDesainPanggil;
+use App\Events\EventCsToDesainPanggil;
 use App\Models\AntrianNotif;
 use App\Models\AntrianPanggil;
 use App\Models\AntrianPengunjung;
@@ -176,7 +177,7 @@ class AntrianController extends Controller
 
     $antrian_sementara->save();
 
-    event(new EventCustomerDesain($cabang_id));
+    // event(new EventCustomerDesain($cabang_id));
 
     if (Auth::user()->karyawan) {
       if (Auth::user()->karyawan->master_cabang_id == 5) {
@@ -494,11 +495,29 @@ class AntrianController extends Controller
       $antrian_terakhir_cs = 0;
     }
 
+    $antrian_sementara_cs = AntrianSementara::where('cabang_id', $cabang_id)
+      ->where('status', '!=', 3)
+      ->Where('status', '!=', 4)
+      ->Where('status', '!=', 0)
+      ->where('jabatan', 'cs')
+      ->orderBy('id', 'desc')
+      ->first();
+
+    $antrian_sementara = AntrianSementara::where('cabang_id', $cabang_id)
+      ->where('status', '!=', 3)
+      ->Where('status', '!=', 4)
+      ->Where('status', '!=', 0)
+      ->where('jabatan', 'desain')
+      ->orderBy('id', 'desc')
+      ->first();
+
     return view('pages.antrian.displayListTotal', [
       'antrian_terakhir' => $antrian_terakhir,
       'antrian_terakhir_cs' => $antrian_terakhir_cs,
       'total_antrian' => $total_antrian,
-      'total_antrian_cs' => $total_antrian_cs
+      'total_antrian_cs' => $total_antrian_cs,
+      'antrian_sementaras' => $antrian_sementara,
+      'antrian_sementara_cs' => $antrian_sementara_cs
     ]);
   }
 
@@ -587,11 +606,15 @@ class AntrianController extends Controller
       $cabang_id = Auth::user()->karyawan->master_cabang_id;
     }
 
+    $antrian_user = AntrianUser::where('karyawan_id', Auth::user()->master_karyawan_id)->first();
+
     if ($request->aksi == "panggil") {
       $antrian_sementara = AntrianSementara::where('cabang_id', $cabang_id)->where('keterangan', 'cs_to_desain')->where('nomor_antrian', $request->nomor)->first();
       $antrian_sementara->status = 1;
       $antrian_sementara->karyawan_id = $karyawan_id;
       $antrian_sementara->cabang_id = $cabang_id;
+
+      event(new EventCsToDesainPanggil($cabang_id, $antrian_user->nomor, $request->nomor));
     } elseif ($request->aksi == "mulai") {
       $antrian_sementara = AntrianSementara::where('cabang_id', $cabang_id)->where('keterangan', 'cs_to_desain')->where('nomor_antrian', $request->nomor)->where('status', 1)->first();
       $antrian_sementara->status = 2;
