@@ -131,12 +131,31 @@
           {{-- atas --}}
           <div class="row cs">
             <div class="col-lg-8">
-              <div class="card">
-                {{-- <iframe width="100%" height="770px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --}}
-                {{-- <video width="100%" height="770px" autoplay controls loop>
-                  <source src="{{ asset('public/assets/dzikir-pagi.mp4') }}" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video> --}}
+              <div class="card display-media" style="background-color: white;">
+                <div id="media_dasar" style="width: 100%; height: 770px; display:flex; justify-content: center; align-items: center;">
+                  <img src="{{ asset('public/assets/logo-biru.png') }}" alt="logo" style="width: 40%;">
+                </div>
+                <!-- dzikir pagi -->
+                <div id="dzikir_pagi" class="d-none">
+                  <video width="100%" height="770px" id="video_dzikir_pagi" controls>
+                    <source src="{{ asset('public/assets/dzikir-pagi.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>                  
+                </div>
+                <!-- dzikir petang -->
+                <div id="dzikir_petang" class="d-none">
+                  <video width="100%" height="770px" id="video_dzikir_petang" controls>
+                    <source src="{{ asset('public/assets/dzikir-petang.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>                  
+                </div>
+                <!-- adzan ---> 
+                <div id="adzan" class="d-none">
+                  <video width="100%" height="770px" id="video_adzan" controls>
+                    <source src="{{ asset('public/assets/adzan.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>                  
+                </div>
               </div>
             </div>
             <div class="col-lg-4 display-list-total" style="height: 770px;"></div>
@@ -299,7 +318,30 @@
     const c = "{{ URL::asset('public/assets/ringtone/c.mp3') }}";
     const d = "{{ URL::asset('public/assets/ringtone/d.mp3') }}";
     const kecs = "{{ URL::asset('public/assets/ringtone/ke-cs.wav') }}";
-    const kedesain = "{{ URL::asset('public/assets/ringtone/ke-desain.wav') }}";
+    const kedesain = "{{ URL::asset('public/assets/ringtone/kedesign.mp3') }}";
+
+    function antrianDesain(angka, desain) {
+      const audio_notif = new Audio(notif);
+      const audio_nomor = new Audio(nomor_antrian);
+      const audio_kedesain = new Audio(kedesain);
+
+      const audio_file = document.getElementById("angka-" + angka);
+      const audio_desain = document.getElementById("angka-desain-" + desain);
+
+      audio_notif.play();
+      audio_notif.addEventListener("ended", () => {
+        audio_nomor.play();
+      })
+      audio_nomor.addEventListener("ended", () => {
+        audio_file.play();
+      })
+      audio_file.addEventListener("ended", () => {
+        audio_kedesain.play();
+      })
+      audio_kedesain.addEventListener("ended", () => {
+        audio_desain.play();
+      })
+    }
     
     function antrianDesainPbg(angka, desain) {
       const audio_notif = new Audio(notif);
@@ -416,86 +458,107 @@
         })
       }
 
-    //   panggilAksi();
-    //   function panggilAksi() {
-    //     setTimeout(() => {
-    //       panggil();
-    //       panggilAksi();
-    //     }, 1000);
-    //   }
-      
-    //   // panggil();
-    //   function panggil() {
-    //     $.ajax({
-    //       url: "{{ URL::route('antrian_display.panggil') }}",
-    //       type: "get",
-    //       success: function (response) {
-    //         if (response.panggils.length > 0) {
-    //           $.each(response.panggils, function (index, item) {
-    //             if (item.cabang_id == response.cabang_id) {
-    //               if (item.cabang_id == 5) {
-    //                 antrianDesainPbg(item.antrian, item.nomor); 
-    //               } else {
-    //                 antrianDesain(item.antrian, item.nomor);                    
-    //               }
-    //             }
-    //           })
-    //         }
-    //       }
-    //     })
-    //   }
+      const waktuDzikirPagi = '8:0';
+      const wakutDzikirPetang = '15:30';
+      const wakutDzuhur = '11:56';
+      const waktuAshar = '15:12';
+      const waktuMaghrib = '17:58';
+      const waktuIsya = '19:05';
 
-    //   panggilDeleteAksi();
-    //   function panggilDeleteAksi() {
-    //     setTimeout(() => {
-    //       panggilDelete();  
-    //       panggilDeleteAksi();        
-    //     }, 2000);
-    //   }
-    //   // panggilDelete();
-    //   function panggilDelete() {
-    //     $.ajax({
-    //       url: "{{ URL::route('antrian_display.panggil.delete') }}",
-    //       type: "get"
-    //     })
-    //   }
+      runMediaPlay();
+      function runMediaPlay() {
+        setTimeout(() => {
+          const date = new Date;
+          const minutes = date.getMinutes();
+          const hour = date.getHours();
+          const waktuSekarang = `${hour}:${minutes}`;
+
+          if (waktuSekarang === waktuDzikirPagi) {
+            $('#dzikir_pagi').removeClass('d-none');
+            // $('#video_dzikir_pagi').autoplay = true;
+            // $('#video_dzikir_pagi').load();
+            document.getElementById("video_dzikir_pagi").autoplay = true;
+            document.getElementById("video_dzikir_pagi").load();
+            $('#media_dasar').addClass('d-none');
+            
+            document.getElementById('video_dzikir_pagi').addEventListener("ended", () => {
+              $('#dzikir_pagi').addClass('d-none');
+              // $('#video_dzikir_pagi').prop('autoplay', false);
+              $('#media_dasar').removeClass('d-none');
+              runMediaPlay();
+            })
+          } else if (waktuSekarang === wakutDzikirPetang) {
+            $('#dzikir_petang').removeClass('d-none');
+            // $('#video_dzikir_petang').prop('autoplay', true);
+            document.getElementById("video_dzikir_petang").autoplay = true;
+            document.getElementById("video_dzikir_petang").load();
+            $('#media_dasar').addClass('d-none');
+
+            document.getElementById('video_dzikir_petang').addEventListener("ended", () => {
+              $('#dzikir_petang').addClass('d-none');
+              // $('#video_dzikir_petang').prop('autoplay', false);
+              $('#media_dasar').removeClass('d-none');
+              runMediaPlay();
+            })
+          } else if (waktuSekarang === wakutDzuhur || waktuSekarang === waktuAshar || waktuSekarang === waktuMaghrib || waktuSekarang === waktuIsya) {
+            $('#adzan').removeClass('d-none');
+            $('#video_adzan').prop('autoplay', true);
+            $('#media_dasar').addClass('d-none');
+            
+            document.getElementById('video_adzan').addEventListener("ended", () => {
+              $('#adzan').addClass('d-none');
+              $('#video_adzan').prop('autoplay', false);
+              $('#media_dasar').removeClass('d-none');
+              runMediaPlay();
+            })
+          } else {
+            runMediaPlay();
+          }
+        }, 1000);
+      }
+
+      // function mediaPlay() {
+      //   const waktuSekarang = `${hour}:${minutes}`;
+      //   let val = ``;
+      //   if (waktuSekarang === waktuDzikirPagi) {
+      //     val += `
+      //       <div>
+      //         <video width="100%" height="770px" autoplay controls>
+      //           <source src="{{ asset('public/assets/dzikir-pagi.mp4') }}" type="video/mp4">
+      //           Your browser does not support the video tag.
+      //         </video>                  
+      //       </div>
+      //     `;
+      //   } else if (waktuSekarang === wakutDzikirPetang) {
+      //     val += `
+      //       <div>
+      //         <video width="100%" height="770px" autoplay controls>
+      //           <source src="{{ asset('public/assets/dzikir-petang.mp4') }}" type="video/mp4">
+      //           Your browser does not support the video tag.
+      //         </video>                  
+      //       </div>
+      //     `;
+      //     console.log(wakutDzikirPetang);
+      //   } else if (waktuSekarang === wakutDzuhur || waktuSekarang === waktuAshar || waktuSekarang === waktuMaghrib || waktuSekarang === waktuIsya) {
+      //     val += `
+      //       <div>
+      //         <video width="100%" height="770px" autoplay controls>
+      //           <source src="{{ asset('public/assets/adzan.mp4') }}" type="video/mp4">
+      //           Your browser does not support the video tag.
+      //         </video>                  
+      //       </div>
+      //     `;
+      //   } else {
+      //     val += `
+      //       <div>
+      //         <iframe width="100%" height="770px" src="https://www.youtube.com/embed/videoseries?list=PLUmr4_LW9HnOp4yQP-d5K-kZ1rJ0nI7yG&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      //       </div>
+      //     `;
+      //   }
+
+      //   $('.display-media').html(val);
+      // }
     })
-
-    // function antrianDesain(angka, desain) {
-    //   setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
-    //   setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
-    //   setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 4300);
-    //   setTimeout(function(){ document.getElementById("kedesign").play(); }, 5000);
-    //   setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 6100);
-    // }
-
-    // function antrianDesainPbg(angka, desain) {
-    //   setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
-    //   setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
-    //   setTimeout(function(){ document.getElementById("d").play(); }, 4500);
-    //   setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 5000);
-    //   setTimeout(function(){ document.getElementById("kedesign").play(); }, 6000);
-    //   setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 7000);
-    // }
-
-    // function antrianCsToDesainPbg(angka, desain) {
-    //   setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
-    //   setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
-    //   setTimeout(function(){ document.getElementById("c").play(); }, 5000);
-    //   setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 6000);
-    //   setTimeout(function(){ document.getElementById("kedesign").play(); }, 8000);
-    //   setTimeout(function(){ document.getElementById("angka-" + desain).play(); }, 10000);
-    // }
-
-    // function antrianCs(angka) {
-      // setTimeout(function(){ document.getElementById("notif").play(); }, 1000);
-      // setTimeout(function(){ document.getElementById("nomor_antrian").play(); }, 3000);
-      // setTimeout(function(){ document.getElementById("c").play(); }, 5000);
-      // setTimeout(function(){ document.getElementById("angka-" + angka).play(); }, 6000);
-      // setTimeout(function(){ document.getElementById("kecs").play(); }, 8000);
-      // document.getElementById("notif").play();
-      // const
-    // }
   </script>
 </body>
 </html>
