@@ -177,7 +177,7 @@ class AntrianController extends Controller
 
     $antrian_sementara->save();
 
-    // event(new EventCustomerDesain($cabang_id));
+    event(new EventCustomerDesain($cabang_id));
 
     if (Auth::user()->karyawan) {
       if (Auth::user()->karyawan->master_cabang_id == 5) {
