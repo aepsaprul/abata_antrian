@@ -152,7 +152,7 @@
                 <!-- adzan ---> 
                 <div id="adzan" class="d-none">
                   <video width="100%" height="770px" id="video_adzan" controls>
-                    <source src="{{ asset('public/assets/adzan.mp4') }}" type="video/mp4">
+                    <source src="{{ asset('public/assets/adzan2.mp4') }}" type="video/mp4">
                     Your browser does not support the video tag.
                   </video>                  
                 </div>
@@ -458,12 +458,12 @@
         })
       }
 
-      const waktuDzikirPagi = '8:0';
-      const wakutDzikirPetang = '15:30';
+      const waktuDzikirPagi = '8:40';
+      const wakutDzikirPetang = '15:45';
       const wakutDzuhur = '11:56';
       const waktuAshar = '15:12';
       const waktuMaghrib = '17:58';
-      const waktuIsya = '19:05';
+      const waktuIsya = '19:5';
 
       runMediaPlay();
       function runMediaPlay() {
@@ -502,12 +502,14 @@
             })
           } else if (waktuSekarang === wakutDzuhur || waktuSekarang === waktuAshar || waktuSekarang === waktuMaghrib || waktuSekarang === waktuIsya) {
             $('#adzan').removeClass('d-none');
-            $('#video_adzan').prop('autoplay', true);
+            // $('#video_adzan').prop('autoplay', true);
+            document.getElementById("video_adzan").autoplay = true;
+            document.getElementById("video_adzan").load();
             $('#media_dasar').addClass('d-none');
             
             document.getElementById('video_adzan').addEventListener("ended", () => {
               $('#adzan').addClass('d-none');
-              $('#video_adzan').prop('autoplay', false);
+              // $('#video_adzan').prop('autoplay', false);
               $('#media_dasar').removeClass('d-none');
               runMediaPlay();
             })
