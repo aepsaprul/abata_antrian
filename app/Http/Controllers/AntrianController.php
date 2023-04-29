@@ -426,32 +426,60 @@ class AntrianController extends Controller
       $antrian_sementara->status = 3;
       $antrian_sementara->selesai = Carbon::now();
       $antrian_sementara->keterangan = "simpan";
-    } else {
-      $antrian_sementara = AntrianSementara::where('cabang_id', $cabang_id)->where('keterangan', 'desain')->where('nomor_antrian', $request->nomor)->where('status', 1)->first();
-      $antrian_sementara->status = 4;
-      $antrian_sementara->keterangan = "simpan";
-    }
-    $antrian_sementara->save();
 
-    $pengunjung = new AntrianPengunjung;
-    $pengunjung->nomor_antrian = $request->nomor;
-    $pengunjung->nama_customer = $antrian_sementara->nama_customer;
-    $pengunjung->telepon = $antrian_sementara->telepon;
-    $pengunjung->customer_filter_id = $antrian_sementara->customer_filter_id;
-    $pengunjung->jabatan = "desain";
-    $pengunjung->master_karyawan_id = $karyawan_id;
-    $pengunjung->master_cabang_id = $cabang_id;
-    $pengunjung->tanggal = Carbon::now();
-
-    if ($request->aksi == "selesai") {
+      $pengunjung = new AntrianPengunjung;
+      $pengunjung->nomor_antrian = $request->nomor;
+      $pengunjung->nama_customer = $antrian_sementara->nama_customer;
+      $pengunjung->telepon = $antrian_sementara->telepon;
+      $pengunjung->customer_filter_id = $antrian_sementara->customer_filter_id;
+      $pengunjung->jabatan = "desain";
+      $pengunjung->master_karyawan_id = $karyawan_id;
+      $pengunjung->master_cabang_id = $cabang_id;
+      $pengunjung->tanggal = Carbon::now();
       $pengunjung->mulai = $antrian_sementara->mulai;
       $pengunjung->selesai = Carbon::now();
       $pengunjung->status = 3;
       $pengunjung->save();
     } else {
+      $antrian_sementara = AntrianSementara::where('cabang_id', $cabang_id)->where('keterangan', 'desain')->where('nomor_antrian', $request->nomor)->where('status', 1)->first();
+      $antrian_sementara->status = 4;
+      $antrian_sementara->keterangan = "simpan";
+
+      $pengunjung = new AntrianPengunjung;
+      $pengunjung->nomor_antrian = $request->nomor;
+      $pengunjung->nama_customer = $antrian_sementara->nama_customer;
+      $pengunjung->telepon = $antrian_sementara->telepon;
+      $pengunjung->customer_filter_id = $antrian_sementara->customer_filter_id;
+      $pengunjung->jabatan = "desain";
+      $pengunjung->master_karyawan_id = $karyawan_id;
+      $pengunjung->master_cabang_id = $cabang_id;
+      $pengunjung->tanggal = Carbon::now();
+      $pengunjung->mulai = $antrian_sementara->mulai;
+      $pengunjung->selesai = Carbon::now();
       $pengunjung->status = 4;
       $pengunjung->save();
     }
+    $antrian_sementara->save();
+
+    // $pengunjung = new AntrianPengunjung;
+    // $pengunjung->nomor_antrian = $request->nomor;
+    // $pengunjung->nama_customer = $antrian_sementara->nama_customer;
+    // $pengunjung->telepon = $antrian_sementara->telepon;
+    // $pengunjung->customer_filter_id = $antrian_sementara->customer_filter_id;
+    // $pengunjung->jabatan = "desain";
+    // $pengunjung->master_karyawan_id = $karyawan_id;
+    // $pengunjung->master_cabang_id = $cabang_id;
+    // $pengunjung->tanggal = Carbon::now();
+
+    // if ($request->aksi == "selesai") {
+    //   $pengunjung->mulai = $antrian_sementara->mulai;
+    //   $pengunjung->selesai = Carbon::now();
+    //   $pengunjung->status = 3;
+    //   $pengunjung->save();
+    // } else {
+    //   $pengunjung->status = 4;
+    //   $pengunjung->save();
+    // }
     
     return response()->json([
       'status' => 200
