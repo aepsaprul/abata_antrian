@@ -38,12 +38,61 @@
                   <button type="button" class="btn btn-primary btn-block btn-input">Input</button>
                 </div>
               </form>
+              <div>
+                <a href="#" id="btn_tambah_customer" class="border-bottom">Tambah Customer</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+</div>
+
+{{-- modal create --}}
+<div class="modal fade modal-create" id="modal-default">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="form-create" action="{{ route('design_offline.customer.add') }}" method="POST">
+        @csrf
+        <div class="modal-header">
+          <h4 class="modal-title">Tambah Data Customer</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="create_nama" class="form-label">Nama Customer</label>
+            <input type="text"
+                class="form-control form-control-sm"
+                id="create_nama"
+                name="create_nama"
+                maxlength="30"
+                required>
+          </div>
+          <div class="mb-3">
+            <label for="create_telepon" class="form-label">Telepon</label>
+            <input type="text"
+                class="form-control form-control-sm"
+                id="create_telepon"
+                name="create_telepon"
+                maxlength="30"
+                required>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button class="btn btn-primary btn-spinner-create d-none" disabled style="width: 130px;">
+            <span class="spinner-grow spinner-grow-sm"></span>
+            Loading...
+          </button>
+          <button type="submit" class="btn btn-primary btn-create-save" style="width: 130px;">
+            <i class="fas fa-save"></i> Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 @endsection
@@ -144,6 +193,12 @@
           }
         })
       }
+    })
+
+    // btn tambah customer
+    $('#btn_tambah_customer').on('click', function(e) {
+      e.preventDefault();
+      $('.modal-create').modal('show');
     })
   })
 </script>

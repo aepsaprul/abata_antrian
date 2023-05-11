@@ -30,9 +30,10 @@
           <button class="btn btn-warning btn-revisi" data-id="{{ $item->id }}" style="border-radius: 0 0 5px 0; width: 45%;" disabled>Revisi</button>
         @else
           @if ($item->status_id == 2)
-            <button class="btn btn-warning btn-approv" data-id="{{ $item->id }}" style="border-radius: 0 0 0 5px; width: 30.33%;" disabled>Approv</button>
-            <button class="btn btn-primary btn-revisi" data-id="{{ $item->id }}" style="border-radius: 0 0 0 0; width: 30.33%;">Revisi</button>
-            <button class="btn btn-primary btn-selesai" data-id="{{ $item->id }}" style="border-radius: 0 0 5px 0; width: 30.33%;">Selesai</button>               
+            <button class="btn btn-warning btn-approv" data-id="{{ $item->id }}" style="border-radius: 0 0 0 5px; width: 23%;" disabled>Approv</button>
+            <button class="btn btn-primary btn-revisi" data-id="{{ $item->id }}" style="border-radius: 0 0 0 0; width: 23%;">Revisi</button>
+            <button class="btn btn-primary btn-selesai" data-id="{{ $item->id }}" style="border-radius: 0 0 0 0; width: 23%;">Selesai</button>  
+            <button class="btn btn-primary btn-cancel" data-id="{{ $item->id }}" style="border-radius: 0 0 5px 0; width: 23%;">Cancel</button>               
           @else
             <button class="btn btn-primary btn-block btn-approv" data-id="{{ $item->id }}" style="border-radius: 0 0 5px 5px; color: yellow;">Approv</button> 
           @endif

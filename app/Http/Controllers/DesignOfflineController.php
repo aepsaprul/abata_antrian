@@ -24,6 +24,26 @@ class DesignOfflineController extends Controller
     ]);
   }
 
+  public function customerAdd(Request $request)
+  {
+    $data_customer = count(MasterCustomer::where('telepon', $request->create_telepon)->get());
+    if ($data_customer == 0) {
+      $customers = new MasterCustomer;
+      $customers->nama_customer = $request->create_nama;
+      $customers->telepon = $request->create_telepon;
+
+      if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
+        $customers->master_cabang_id = 1;
+      } else {
+        $customers->master_cabang_id = Auth::user()->karyawan->master_cabang_id;
+      }
+
+      $customers->save();
+    }
+
+    return redirect()->route('design_offline.customer');
+  }
+
   public function customerStore(Request $request)
   {
     $konsep = new Konsep();
@@ -58,7 +78,7 @@ class DesignOfflineController extends Controller
     }
     
     $konsep = Konsep::with('customer')
-      ->where('status_id', '!=', '5')
+      ->whereNotIn('status_id', [5, 6])
       ->where('cabang_id', $cabang)
       ->get();
 
@@ -116,6 +136,9 @@ class DesignOfflineController extends Controller
       $konsep->status_id = $status_id;
     } else if ($request->status == "selesai") {
       $status_id = 4;
+      $konsep->status_id = $status_id;
+    } else if ($request->status == "cancel") {
+      $status_id = 6;
       $konsep->status_id = $status_id;
     } else {
       $status_id = 5;

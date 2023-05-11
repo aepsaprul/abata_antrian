@@ -143,6 +143,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // design offline
         Route::get('design_offline/customer', [DesignOfflineController::class, 'customer'])->name('design_offline.customer');
+        Route::post('design_offline/customer/add', [DesignOfflineController::class, 'customerAdd'])->name('design_offline.customer.add');
         Route::post('design_offline/customer/store', [DesignOfflineController::class, 'customerStore'])->name('design_offline.customer.store');
         Route::post('design_offline/customer/search', [DesignOfflineController::class, 'customerSearch'])->name('design_offline.customer.search');
 

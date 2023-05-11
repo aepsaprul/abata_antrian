@@ -169,6 +169,30 @@
         }
       })
     })
+
+    // btn cancel
+    $(document).on('click', '.btn-cancel', function (e) {
+      e.preventDefault();
+
+      let id = $(this).attr('data-id');
+
+      let url = "{{ URL::route('design_offline.desain.update', [':id']) }}";
+      url = url.replace(':id', id);
+
+      let formData = {
+        id: id,
+        status: "cancel"
+      }
+
+      $.ajax({
+        url: url,
+        type: "put",
+        data: formData,
+        beforeSend: function () {
+          $('.btn-revisi').attr('disabled', true);
+        }
+      })
+    })
   })
 </script>
 @endsection
