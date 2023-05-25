@@ -20,20 +20,20 @@ use Illuminate\Support\Facades\Redirect;
 
 class AntrianController extends Controller
 {
-  public function tanggal()
-  {
-    $antrian = AntrianSementara::first();
-    if ($antrian != null) {
-      $tanggal = $antrian->created_at->format('d');
-    } else {
-      $tanggal = date('d');
-    }
+  // public function tanggal()
+  // {
+  //   $antrian = AntrianSementara::first();
+  //   if ($antrian != null) {
+  //     $tanggal = $antrian->created_at->format('d');
+  //   } else {
+  //     $tanggal = date('d');
+  //   }
     
 
-    return response()->json([
-      'status' => $tanggal
-    ]);
-  }
+  //   return response()->json([
+  //     'status' => $tanggal
+  //   ]);
+  // }
   
   // customer
   public function customer()
@@ -195,9 +195,9 @@ class AntrianController extends Controller
   public function resetAntrian()
   {
     if (Auth::user()->roles == "admin" || Auth::user()->karyawan->master_cabang_id == 1) {
-      AntrianSementara::truncate();
+      AntrianSementara::where('cabang_id', 1)->delete();
     } else {
-      AntrianSementara::truncate();
+      AntrianSementara::where('cabang_id', Auth::user()->karyawan->master_cabang_id)->delete();
     }
 
     return response()->json([

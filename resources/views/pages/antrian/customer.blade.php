@@ -28,9 +28,9 @@
               DESAIN / EDIT
             </a>
 
-            {{-- <div class="d-flex justify-content-center mt-5">
-              <a href="{{ route('antrian_reset_antrian') }}" class="btn btn-danger" onclick="confirm('Yakin akan di reset?')">Reset Antrian</a>
-            </div> --}}
+            <div class="d-flex justify-content-center mt-5">
+              <a href="#" class="reset-antrian btn btn-danger" onclick="confirm('Yakin akan di reset?')">Reset Antrian</a>
+            </div>
           </div>
         </div>
       </div>
@@ -38,4 +38,38 @@
   </section>
 </div>
 
+@endsection
+
+@section('script')
+<script>
+  $(document).ready(function() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    var Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
+
+    // reset
+    $(document).on('click', '.reset-antrian', function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: "{{ URL::route('antrian_reset_antrian') }}",
+        type: "get",
+        success: function (response) {
+          Toast.fire({
+            icon: 'success',
+            title: 'Reset nomor antrian berhasil'
+          })
+        }
+      })
+    })
+  });
+</script>
 @endsection

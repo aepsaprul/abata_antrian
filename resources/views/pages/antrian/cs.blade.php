@@ -8,7 +8,7 @@
   <section class="content-header">
     <div class="container-fluid">
       <div class="d-flex justify-content-between">
-        <h4 class="text-center text-uppercase">cs {{ Auth::user()->name }}</h4>
+        <h4 class="text-center text-uppercase">cs {{ Auth::user()->name }} <button class="reset-antrian btn btn-danger">Reset Antrian</button> </h4>
         <p style="text-align: center;">
           @if (Auth::user()->roles == "admin")
             <a href="#" class="btn btn-danger btn-sm">Komputer OFF</a>
@@ -61,7 +61,7 @@
     function tampil() {
       setTimeout(() => {
         csList();
-        tanggalAntrianSementara();
+        // tanggalAntrianSementara();
         tampil();
       }, 1000);
     }
@@ -208,27 +208,34 @@
     })
 
     // reset
-    function reset() {
+    $(document).on('click', '.reset-antrian', function (e) {
+      e.preventDefault();
       $.ajax({
         url: "{{ URL::route('antrian_reset_antrian') }}",
-        type: "get"
-      })    
-    }
-
-    let tanggal = new Date();
-    let tanggal_sekarang = tanggal.getDate();
-
-    function tanggalAntrianSementara() {
-      $.ajax({
-        url: "{{ URL::route('antrian.tanggal') }}",
         type: "get",
         success: function (response) {
-          if (tanggal_sekarang != response.status) {
-            reset();
-          }
+          Toast.fire({
+            icon: 'success',
+            title: 'Reset nomor antrian berhasil'
+          })
         }
       })
-    }
+    })
+
+    // let tanggal = new Date();
+    // let tanggal_sekarang = tanggal.getDate();
+
+    // function tanggalAntrianSementara() {
+    //   $.ajax({
+    //     url: "{{ URL::route('antrian.tanggal') }}",
+    //     type: "get",
+    //     success: function (response) {
+    //       if (tanggal_sekarang != response.status) {
+    //         reset();
+    //       }
+    //     }
+    //   })
+    // }
 
     // notifAksi();
     // function notifAksi() {

@@ -116,7 +116,7 @@
       setTimeout(() => {
         desainList();
         csToDesainList();
-        tanggalAntrianSementara();
+        // tanggalAntrianSementara();
         tampil();
       }, 1000);
     }
@@ -403,30 +403,30 @@
     })
 
     // reset
-    function reset() {
-      $.ajax({
-        url: "{{ URL::route('antrian_reset_antrian') }}",
-        type: "get",
-        success: function (response) {}
-      })    
-    }
+    // function reset() {
+    //   $.ajax({
+    //     url: "{{ URL::route('antrian_reset_antrian') }}",
+    //     type: "get",
+    //     success: function (response) {}
+    //   })    
+    // }
 
-    let tanggal = new Date();
-    let tanggal_sekarang = tanggal.getDate();
+    // let tanggal = new Date();
+    // let tanggal_sekarang = tanggal.getDate();
 
-    function tanggalAntrianSementara() {
-      $.ajax({
-        url: "{{ URL::route('antrian.tanggal') }}",
-        type: "get",
-        success: function (response) {
-          if (response.status != null) {
-            if (tanggal_sekarang != response.status) {
-              reset();
-            }            
-          }
-        }
-      })
-    }
+    // function tanggalAntrianSementara() {
+    //   $.ajax({
+    //     url: "{{ URL::route('antrian.tanggal') }}",
+    //     type: "get",
+    //     success: function (response) {
+    //       if (response.status != null) {
+    //         if (tanggal_sekarang != response.status) {
+    //           reset();
+    //         }            
+    //       }
+    //     }
+    //   })
+    // }
 
     // notifAksi();
     // function notifAksi() {
