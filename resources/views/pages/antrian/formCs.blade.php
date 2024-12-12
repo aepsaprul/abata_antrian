@@ -16,7 +16,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                     <div class="mt-5">
                         <center>
-                            <img src="{{ asset('public/assets/logo-bg-blue.png') }}" alt="">
+                            <img src="{{ asset(env('APP_PUBLIC') . 'assets/logo-bg-blue.png') }}" alt="">
                         </center>
                         <form role="form" action="{{ route('antrian.customer.store') }}" method="POST">
                             @csrf
@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="nama" name="nama_customer" required placeholder="Masukkan nama">
+                                    <input type="text" class="form-control" id="nama" name="nama_customer" required placeholder="Masukkan nama123">
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary btn-block">Cetak</button>

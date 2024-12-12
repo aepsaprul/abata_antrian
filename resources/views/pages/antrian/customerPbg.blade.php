@@ -10,18 +10,18 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="{{ asset('public/themes/plugins/fontawesome-free/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ asset(env('APP_PUBLIC') . 'themes/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{{ asset('public/themes/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+  <link rel="stylesheet" href="{{ asset(env('APP_PUBLIC') . 'themes/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
   <!-- SweetAlert2 -->
-  <link rel="stylesheet" href="{{ asset('public/themes/plugins/sweetalert2/sweetalert2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset(env('APP_PUBLIC') . 'themes/plugins/sweetalert2/sweetalert2.min.css') }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('public/themes/dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ asset(env('APP_PUBLIC') . 'themes/dist/css/adminlte.min.css') }}">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <img src="{{ asset('public/assets/dist/img/logo-bg-blue.png') }}" alt="">
+    <img src="{{ asset(env('APP_PUBLIC') . 'assets/logo-bg-blue.png') }}" alt="">
   </div>
 	<div class="social-auth-links text-center mb-3">
 		<a href="{{ url('antrian/page_customer_pbg/1/form') }}" class="btn-siap btn btn-block btn-primary pt-3 pb-3 pr-5 pl-5" style="font-size: 2em; font-weight: bold;">
@@ -36,15 +36,15 @@
 	</div>
 </div>
 
-<script src="{{ asset('public/themes/plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset(env('APP_PUBLIC') . 'themes/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap -->
-<script src="{{ asset('public/themes/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset(env('APP_PUBLIC') . 'themes/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- overlayScrollbars -->
-<script src="{{ asset('public/themes/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+<script src="{{ asset(env('APP_PUBLIC') . 'themes/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <!-- SweetAlert2 -->
-<script src="{{ asset('public/themes/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset(env('APP_PUBLIC') . 'themes/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('public/themes/dist/js/adminlte.js') }}"></script>
+<script src="{{ asset(env('APP_PUBLIC') . 'themes/dist/js/adminlte.js') }}"></script>
 
 <script>
   $(document).ready(function() {
